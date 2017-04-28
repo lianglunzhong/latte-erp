@@ -1,0 +1,80 @@
+{% load tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" href="/static/img/favicon.ico">
+<title>{{ title }}</title> 
+
+<!-- Bootstrap core CSS -->
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="/static/css/main.css" rel="stylesheet">
+<script src="/static/js/jquery-1.10.2.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+<script src="/static/js/bootstrap.min.js"></script>
+
+</head>
+
+<body style='padding-top:0px'>
+<div class="container">
+
+{% if data.msg %}
+<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong>Notice:</strong> {{ data.msg }}
+</div>
+{% endif %}
+
+<br>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th width="50">采购单ID</th>
+            <th width="50">采购条目ID</th>
+            <th>供货商</th>
+            <th width="50">供应商SKU</th> 
+            <th>Model</th>
+            <th>size * qty</th>
+            <th>对单数量</th>
+            <th>未对单数量</th>
+            <th width="80">图片</th> 
+            <th>总数</th>
+            <th>单价</th>
+            <th>总价</th>
+            <th>manager</th>
+            <th>备注</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for obj in data.objs %}
+    <tr>
+        <td>{{ obj.purchaseorder_id_str}}</td>
+        <td>{{ obj.purchaseorderitem_id_str }}</td>
+        <td>{{ obj.supplier }}</td>
+        <td>{{ obj.supplier_sku }}</td>
+        <td>{{ obj.model }}</td>
+        <td>{% for size,qty in obj.size_qty.iteritems %}{{ size }} * {{ qty }}<br>{% endfor %}</td>
+        <td>{% for size,qty in obj.size_real_qty.iteritems %}{{ size }} * {{ qty }}<br>{% endfor %}</td>
+        <td>{% for size,qty in obj.size_not_real_qty.iteritems %}{{ size }} * {{ qty }}<br>{% endfor %}</td>
+        <td><img src="{{ obj.image }}" width="120px"></td>
+        <td>{{ obj.all_qty }}</td>
+        <td>{{ obj.price }}</td>
+        <td>{{ obj.all_price }}</td>
+        <td>{{ obj.manager }}</td>
+        <td>{% for note in obj.note %}{{note}}<br>{% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div><!-- /.container -->
+
+</body>
+</html>

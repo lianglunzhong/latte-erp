@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}latte{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link rel="stylesheet" href="/static/css/bootstrap.css" media="screen">
+        
+        <script src="/static/js/jquery.min.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <script src="/static/js/common.js"></script>
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="bs-component">
+                <nav class="navbar navbar-inverse navbar-fixed-top">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="#">Latte</a>
+                        </div>
+
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav">
+                                <!--<li class="active"><a href="#">Product <span class="sr-only">(current)</span></a></li>-->
+                                <!--<li><a href="#">Order</a></li>-->
+                                <!--<li class="dropdown">-->
+                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>-->
+                                    <!--<ul class="dropdown-menu" role="menu">-->
+                                        <!--<li><a href="#">Action</a></li>-->
+                                        <!--<li><a href="#">Another action</a></li>-->
+                                        <!--<li><a href="#">Something else here</a></li>-->
+                                        <!--<li class="divider"></li>-->
+                                        <!--<li><a href="#">Separated link</a></li>-->
+                                        <!--<li class="divider"></li>-->
+                                        <!--<li><a href="#">One more separated link</a></li>-->
+                                    <!--</ul>-->
+                                <!--</li>-->
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:" aria-expanded="true">
+                                        <span class="glyphicon glyphicon-tags"></span>产品<span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="disabled"><a href="#">产品管理</a></li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/catalog">
+                                                <span class="glyphicon glyphicon-"></span>品类Category
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'product_list' %}">
+                                                <span class="glyphicon glyphicon-"></span>产品
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/productImage">
+                                                <span class="glyphicon glyphicon-"></span>图片
+                                            </a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        <li class="disabled"><a href="#">选款</a></li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/productRequire">
+                                                <span class="glyphicon glyphicon-"></span>选款需求
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/product">
+                                                <span class="glyphicon glyphicon-"></span>选款Model
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/SelectProduct">
+                                                <span class="glyphicon glyphicon-"></span>选款产品列表
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/EditProduct">
+                                                <span class="glyphicon glyphicon-"></span>选款产品编辑
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:" >
+                                        <span class="glyphicon glyphicon-tags"></span>供应链<span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/catalog">
+                                                <span class="glyphicon glyphicon-"></span>货品需求
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'supplier_list' %}">
+                                                <span class="glyphicon glyphicon-"></span>供货商
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'product_list' %}">
+                                                <span class="glyphicon glyphicon-"></span>采购单
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/product">
+                                                <span class="glyphicon glyphicon-"></span>生产单
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">
+                                        <span class="glyphicon glyphicon-list-alt"></span>订单
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="disabled"><a href="#">订单</a></li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/order">
+                                                <span class="glyphicon glyphicon-"></span>订单
+                                            </a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        <li class="disabled"><a href="#">包裹</a></li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/package">
+                                                <span class="glyphicon glyphicon-"></span>包裹
+                                            </a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">
+                                        <span class="glyphicon glyphicon-home"></span>仓储
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="disabled"><a href="#">仓库</a></li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/warehouse">
+                                                <span class="glyphicon glyphicon-"></span>仓库
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/warehousePosition">
+                                                <span class="glyphicon glyphicon-"></span>库位
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/stock">
+                                                <span class="glyphicon glyphicon-"></span>库存
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/stockIn">
+                                                <span class="glyphicon glyphicon-"></span>入库
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/stockOut">
+                                                <span class="glyphicon glyphicon-"></span>出库
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/stockAdjustment">
+                                                <span class="glyphicon glyphicon-"></span>库存调整
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/stockAllotment">
+                                                <span class="glyphicon glyphicon-"></span>库存调拨
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/stockTaking">
+                                                <span class="glyphicon glyphicon-"></span>
+                                                库存盘点
+                                            </a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">
+                                        <span class="glyphicon glyphicon-home"></span>
+                                        拣货
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/pickList">
+                                                <span class="glyphicon glyphicon-"></span>
+                                                拣货
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">
+                                        <span class="glyphicon glyphicon-plane"></span>物流
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="disabled">
+                                            <a href="#">物流管理</a></li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/logisticsSupplier">
+                                                <span class="glyphicon glyphicon-"></span>物流商
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/logistics">
+                                                <span class="glyphicon glyphicon-"></span>物流方式
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/logisticsCode">
+                                                <span class="glyphicon glyphicon-"></span>跟踪号
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/logisticsZone">
+                                                <span class="glyphicon glyphicon-"></span>物流分区报价
+                                            </a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">
+                                        <span class="glyphicon glyphicon-shopping-cart"></span>采购
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="disabled">
+                                            <a href="#">采购管理</a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/purchaseItem">
+                                                <span class="glyphicon glyphicon-"></span>采购需求
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/purchaseOrder">
+                                                <span class="glyphicon glyphicon-"></span>采购单
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/purchaseList">
+                                                <span class="glyphicon glyphicon-"></span>对单
+                                            </a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">
+                                        <span class="glyphicon glyphicon-transfer"></span>渠道
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="disabled"><a href="#">渠道管理</a></li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/channel">
+                                                <span class="glyphicon glyphicon-"></span>渠道
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://erp.jinjidexiaoxuesheng.com/channelAccount">
+                                                <span class="glyphicon glyphicon-"></span>账号
+                                            </a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="http://erp.jinjidexiaoxuesheng.com">
+                                        <span class="glyphicon glyphicon-piggy-bank"></span>财务
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="http://erp.jinjidexiaoxuesheng.com">
+                                        <span class="glyphicon glyphicon-user"></span>客户
+                                    </a>
+                                </li>
+                            </ul>
+                            <!--<form class="navbar-form navbar-left" role="search">-->
+                                <!--<div class="form-group">-->
+                                    <!--<input type="text" class="form-control" placeholder="Search">-->
+                                <!--</div>-->
+                                <!--<button type="submit" class="btn btn-default">Go</button>-->
+                            <!--</form>-->
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="#">Account</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="page-header" id="banner">
+                <div class="row">
+                    <!--<div class="col-lg-2 col-md-2 col-sm-3">-->
+                        <!--<ul class="nav nav-pills nav-stacked">-->
+                          <!--<li role="presentation" class="active"><a href="{% url 'product_list' %}">Home</a></li>-->
+                          <!--&lt;!&ndash;<li role="presentation"><a href="#">Profile</a></li>&ndash;&gt;-->
+                          <!--&lt;!&ndash;<li role="presentation"><a href="#">Messages</a></li>&ndash;&gt;-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="bs-component">
+                            <ul class="breadcrumb">
+                                {% for breadcrumb in breadcrumbs %}
+                                    {% if not forloop.last %}
+                                    <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
+                                    {% else %}
+                                    <li class="active">{{breadcrumb.name}}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.tags %}
+                                    {% ifequal message.tags 'error'%}
+                                        <div class="alert alert-dismissible alert-danger">
+                                    {% else %}
+                                        <div class="alert alert-dismissible alert-{{ message.tags }}">
+                                    {% endifequal %}
+                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                            <h4>{{ message.tags|capfirst }}!</h4>
+                                            <p>{{ message }}</p>
+                                        </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% block content%}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/static/js/jquery.min.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <script src="/static/js/common.js"></script>
+        {% block jscontent %}
+        {% endblock %}
+</html>
+

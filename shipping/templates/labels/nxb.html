@@ -1,0 +1,209 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"></head><body>
+<style>
+table {border-collapse:collapse;border-spacing:0;display:table;}
+td{padding:0;}
+</style>
+{% if datas %}
+    {% for data in datas %}
+    <table style="">
+        <tbody><tr>
+        <td>
+        <table style="cursor: default; border: 1px solid #000;font-size: 12px;font-family: Microsoft YaHei, Arial, Helvetica, sans-serif; letter-spacing: normal; orphans: auto; text-indent: 0px; text-transform: none; widows: auto; word-spacing: 0px; -webkit-text-stroke  -width: 0px; background-color: #ffffff;  color:   #000000;" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="440" align="left">
+            <tbody>
+            <tr>
+            <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;" bgcolor="#fff" valign="middle" align="center" height="40">
+            <table style="cursor: default; border: 0px dashed #bbbbbb; font-size: 10px; text-align: center;" border="0" cellpadding="0" cellspacing="0" width="98%">
+            <tbody>
+            <tr>
+            <td style="font-weight:bold;font-size: 13px;  cursor: text;   border: 0px dashed #fff;" width="30%" align="left"><img src="/static/label_img/zgyz_logo.jpg" width="100" height="40"></td>
+            <td style="margin: 5px; cursor: text; border: 0px dashed #fff;" width="40%" align="center">航空<br>Small packet<br>BY AIR</td>
+            <td style="font-weight:bold;font-size: 13px;  cursor: text;   border: 0px dashed #fff;" width="30%" align="right">{{ data.country_code }} {{ data.country_cn }}</td>
+            </tr>
+            </tbody>
+            </table>
+            </td>
+            </tr>
+            <tr>
+            <td style="color: #000000; font-family: Verdana, Arial, Helvetica, sans-  serif; font-size: 10px; cursor: text; border-bottom: 1px solid #000;" bgcolor="#fff" valign="middle" align="left" height="12">
+            &nbsp;&nbsp;协议客户：南京快悦电子商务有限公司（32080100890000）
+            </td>
+            </tr>
+             <tr>
+            <td style="color: #000000; font-family: Verdana,   Arial, Helvetica, sans-serif; font-size: 10px; cursor: text; border-bottom:1px solid #000;" valign="middle" align="center" height="22">
+            <table style="cursor: default; border: 0px dashed #bbbbbb; font-size: 10px; text-align: center;" border="0" cellpadding="0" cellspacing="0" width="98%">
+            <tbody>
+            <tr>
+            <td style="cursor: text; border: 0px dashed #fff;" valign="top" width="20%" align="left">FROM:</td>
+            <td style="cursor: text; border: 0px dashed #fff;" width="80%" align="left"><p>No.63 Longtan Logistics Park,Qixia District,Nanjing</p></td>
+            </tr>
+            <tr>
+            <td style="cursor: text;   border: 0px dashed #fff;" width="20%" align="left">Zip:210058</td>
+            <td style="cursor: text;   border: 0px dashed #fff;padding-left:10px;" width="80%" align="right"> Tel:442032899993</td>
+            </tr>
+            </tbody>
+            </table>
+            </td>
+            </tr>
+            <tr>
+            <td style="color: #000000; font-family: Verdana,   Arial, Helvetica, sans-serif;  cursor: text; border-bottom:1px solid #000;" valign="top" align="center" height="45">
+            <table style="cursor: default; border: 0px dashed #bbbbbb; text-align: center;font-size:9px;" border="0" cellpadding="0" cellspacing="0" width="98%">
+            <tbody>
+            <tr>
+            <td style="cursor: text;border: 0px dashed #fff;" valign="top" width="20%" align="left">TO:</td>
+            <td style="cursor: text;border: 0px dashed #fff;word-break : break-all; overflow:hidden;" width="80%" align="left"> <p>{% autoescape off %}<b>{{ data.address }}</b>{% endautoescape %}</p></td>
+            </tr>
+            <tr>
+            <td style="cursor: text;border: 0px dashed #fff;" width="20%" align="left"><b>Zip:{{ data.zip }}</b></td>
+            <td style="cursor: text;border: 0px dashed #fff;padding-left:10px;" width="80%" align="right"><b> Tel:{{ data.phone }}</b></td>
+            </tr>
+            </tbody>
+            </table>
+            </td>
+            </tr>
+            <tr>
+            <td style="color: #000000; font-family: Verdana, Arial, Helvetica, sans-  serif; font-size: 10px; cursor: text; border-bottom: 1px solid #000;" bgcolor="#fff" valign="middle" align="left" height="12">
+            &nbsp;&nbsp;退件单位：南京邮政局函件广告局
+            </td>
+            </tr>
+            <tr>
+            <td style="color: #000000; cursor: text; border-bottom: 1px solid #000;" bgcolor="#fff" valign="middle" align="center" height="50">
+            <table style="cursor: default; text-align: center;" border="0" cellpadding="0" cellspacing="0" width="94%">
+            <tbody>
+            <tr>
+            <td style="font-weight:bold;font-size: 10px;  cursor: text;   border: 0px dashed #fff;" valign="top" width="10%" align="left">
+                {% if data.area %}<span style="font-size:10px;"> {{ data.area }}</span><br>{% endif %}
+                <span style="float:left;">Custom:{{ data.package_id }}</span>
+            </td>
+            <td style="margin: 5px; cursor: text; border: 0px dashed #fff;" valign="top" width="100%" align="center">
+            <img src="{{ barcode128 }}{{ data.tracking_code }}" width="280" height="50" />
+            <span style="float:center;font-weight:bold;font-size:12px;">{{ data.tracking_code }}</span>
+            </td>
+            <td style="font-weight:bold;font-size: 20px;  cursor: text;   border: 0px dashed #fff;" valign="top" width="10%" align="right"></td>
+            </tr>
+            </tbody>
+            </table>
+            </td>
+            </tr>
+            <tr>
+            <td style="color: #000000;  cursor: text; border-collapse:collapse;" cellspacing="0" cellpadding="0" bgcolor="#fff" valign="middle" align="center" height="15">
+                <table style="border-collapse:collapse;cursor: default; border-bottom: 1px solid #000; font-size: 8px; text-align: center;" width="100%">
+                <tbody>
+                <tr>
+                <td style="font-size: 8px;  cursor: text;   border: 0px dashed #fff;" width="98%" align="left">报关签条  <b>CUSTOMS DECLARATION</b> <span style="margin-left:200px;">邮<b>2113  CN22</b></span></td>
+                </tr>
+                </tbody>
+                </table>
+            </td>
+            </tr>
+            <tr><td cellspacing="0" cellpadding="0"><table style="border-collapse:collapse;" width="440"><tbody><tr>
+                <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;font-size:9px;" cellspacing="0" cellpadding="0" bgcolor="#fff" valign="top" width="40%" align="center" height="148">
+                <table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" border="0">
+                <tbody>
+                <tr><td cellspacing="0" cellpadding="0"><table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" width="100%"><tbody><tr>
+                    <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" width="85%" align="left" height="15">邮件种类<b>Category of item</b></td>
+                    <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" width="15%" align="left" height="15"><b>&nbsp;√</b></td>
+                    </tr></tbody></table></td>
+                </tr>
+                <tr>
+                <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" align="left" height="30">内件详细名称和数量 Quantity and detailed description of contents</td>
+                </tr>
+                <tr>
+                <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="middle" align="center" height="20"><b>{{ data.set }}</b></td>
+                </tr>
+                <tr>
+                <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" align="left" height="67">协调系统税则号列和货物原产国（只对产品邮件填写）<br><b>HS tstiff number and country of origin of goods (For commerical items only)</b></td>
+                </tr>
+                <tr>
+                <td style="color: #000000;  cursor: text; border-right: 1px solid #000;font-size:10px;" bgcolor="#fff" valign="middle" align="center" height="18">CN</td>
+                </tr>
+                </tbody>
+                </table>
+                </td>
+            <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;" cellspacing="0" cellpadding="0" bgcolor="#fff" valign="top" width="34%" align="center" height="148">
+            <table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" border="0">
+                <tbody>
+                <tr><td cellspacing="0" cellpadding="0"><table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" width="150"><tbody><tr>
+                    <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:10px;" bgcolor="#fff" valign="middle" width="128" align="center" height="15">其他 Other</td>
+                    </tr></tbody></table></td>
+                </tr>
+                <tr><td cellspacing="0" cellpadding="0"><table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" width="150"><tbody><tr>
+                <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" width="50%" align="left" height="30">重量（千克）<br><b>Weight（kg）</b></td>
+                <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" width="50%" align="left" height="30">价格<br><b>Value</b></td>
+                </tr></tbody></table></td>
+                </tr><tr><td cellspacing="0" cellpadding="0"><table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" width="150"><tbody><tr>
+                <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:10px;" bgcolor="#fff" valign="middle" width="50%" align="center" height="20"><b>0.30</b></td>
+                <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:10px;" bgcolor="#fff" valign="middle" width="50%" align="center" height="20"><b>USD {{ data.customs_amount }}$</b></td>
+                </tr></tbody></table></td>
+                </tr><tr><td cellspacing="0" cellpadding="0"><table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" width="150"><tbody><tr>
+               <td style="color: #000000;  cursor: text;  border-right: 1px solid #000;font-size:10px;" bgcolor="#fff" valign="middle" width="50%" align="center" height="70">总重量<br><b>Total weight</b></td>
+                <td style="color: #000000;  cursor: text; border-right: 1px solid #000;font-size:10px;" bgcolor="#fff" valign="middle" width="50%" align="center" height="70">总价格<br><b>Total Value USD</b></td>
+                </tr></tbody></table></td>
+                </tr><tr><td cellspacing="0" cellpadding="0"><table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" width="150"><tbody><tr>
+               <td style="color: #000000;  cursor: text; border-right: 1px solid #000;font-size:10px;" bgcolor="#fff" valign="middle" width="50%" align="center" height="15"><b>0.30</b></td>
+                <td style="color: #000000;  cursor: text; border-right: 1px solid #000;font-size:10px;" bgcolor="#fff" valign="middle" width="50%" align="center" height="15"><b>{{ data.customs_amount }}$</b></td>
+                </tr></tbody></table></td>
+                </tr></tbody>
+                </table>
+            </td>
+            <td style="color: #000000;  cursor: text; cellspacing=" 0"="" cellpadding="0" border-bottom:="" 1px="" solid="" #000;font-size:10px;"="" bgcolor="#fff" valign="top" width="26%" align="center" height="148">
+                <table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" border="0">
+                <tbody>
+                <tr><td cellspacing="0" cellpadding="0"><table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" width="120"><tbody><tr>
+                    <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:10px;" bgcolor="#fff" valign="top" width="30%" align="left" height="15">航空</td>
+                    <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;font-size:10px;" bgcolor="#fff" valign="top" width="70%" align="left" height="15">Nanjing China</td>
+                    </tr></tbody></table></td>
+                </tr>
+                <tr>
+                <td cellspacing="0" cellpadding="0"><table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" width="120"><tbody><tr>
+                    <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" width="30%" align="left" height="30">PAP<br>AVON</td>
+                    <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" width="70%" align="left" height="30">已验视</td>
+                    </tr></tbody></table></td>
+                </tr>
+                <tr>
+               <td cellspacing="0" cellpadding="0"><table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" width="120"><tbody><tr>
+                    <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" width="50%" align="left" height="40">小包邮件</td>
+                    <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" width="50%" align="left" height="40">单位：南京小包中心</td>
+                    </tr></tbody></table></td>
+                </tr>
+                <tr>
+                <td cellspacing="0" cellpadding="0"><table style="border-collapse:collapse;" cellpadding="0" cellspacing="0" width="120"><tbody><tr>
+                    <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;border-right: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" width="50%" align="left" height="45"><b>PETIT<br>PAQUET</b></td>
+                    <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;font-size:9px;" bgcolor="#fff" valign="top" width="50%" align="left" height="45"><b>验视人：<br>陈义伟</b></td>
+                    </tr></tbody></table></td>
+                </tr>
+                <tr>
+                <td style="color: #000000;  cursor: text; border-bottom: 1px solid #000;font-size:10px;" cellspacing="0" cellpadding="0" bgcolor="#fff" valign="middle" align="center" height="21">CN22</td>
+                </tr>
+                </tbody>
+                </table>
+                </td>
+            </tr></tbody></table></td></tr> 
+            <tr>
+            <td style="color: #000000;  cursor: text;font-size:8px;" bgcolor="#fff" valign="top" align="left" height="50">
+            我保证上述申报准确无误，本函件内未装寄法律或邮政和海关规章禁止寄递的任何危险物品<br>
+            I,the undersigned,whose name and address are given on the 
+item certify that the particulars given in this declaration are correct 
+and that this item does not contain any dangerous article or articles 
+prohibited by legislation or by postal or customs regulations.
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;寄件人签名 Sender's signiture:陈义伟 <span style="float:right;"><b>{{ data.date|date:"Y-m-d" }}</b></span>
+            {% if data.flg %}
+                <span style="float:right;width:150px;display:block;">points redemption</span>
+            {% endif %}
+            </td>
+            </tr>
+            </tbody>
+        </table>
+
+        </td>
+        </tr>
+        </tbody></table>
+    {% endfor %}
+    {% if error_info %}
+    <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Notice:</strong> {{ error_info }}
+    </div>
+    {% endif %}
+{% endif %}

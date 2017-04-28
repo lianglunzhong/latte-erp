@@ -1,0 +1,60 @@
+{% extends "base_header.html" %}
+{% block content %}
+
+
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+    <span style="font-size:20px;font-weight:bold;color:#79aec8;">原面单重新打印</span>
+    <form method="post" action="{% url 'pick_re_print' %}" target="_blank">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="re_print_by_package_id">
+        <label style="width:160px;">输入包裹 ID: </label>
+        <input type="text" name="package_id" id="package_id" value="" style="width:200px;">
+        <input type="submit" class="btn btn-info" style="width:90px;" value="打印面单">
+    </form>
+    <form method="post" action="{% url 'pick_re_print' %}" target="_blank">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="re_print_by_tracking_no">
+        <label style="width:160px;">输入运单号: </label>
+        <input type="text" name="tracking_no" id="tracking_no" value="" style="width:200px;">
+        <input type="submit" class="btn btn-info" style="width:90px;" value="打印面单">
+    </form>
+
+    <form method="post" action="{% url 'pick_re_print' %}" target="_blank">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="get_pdf_by_package_id">
+        <label style="width:160px;">输入包裹 ID: </label>
+        <input type="text" name="package_id" id="package_id" value="" style="width:200px;">
+        <input type="submit" class="btn btn-info" style="width:90px;" value="获取pdf">(暂时只支持EUB)
+    </form>
+</fieldset>
+
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+    <span style="font-size:20px;font-weight:bold;color:#79aec8;">更换物流并打印面单</span>
+    <form method="post" action="{% url 'pick_re_print' %}" target="_blank">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="change_package_shipping">
+        <label style="width:160px;">输入包裹 ID: </label>
+        <input type="text" name="package_id" id="package_id" value="" style="width:200px;">
+        <label style="width:100px;">选择物流方式: </label>
+        <select name="shipping_id" style="height:25px;width:80px;">
+            <option></option>
+            {% for shipping in has_api_shipping %}
+            <option value="{{ shipping.id }}" id="shipping_{{ shipping.id }}">{{ shipping.label }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" class="btn btn-info" style="width:90px;" value="更换物流">
+    </form>
+</fieldset>
+
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+    <span style="font-size:20px;font-weight:bold;color:#79aec8;">打印员工工牌</span>
+    <form method="post" action="{% url 'pick_re_print' %}" target="_blank">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="print_user_username">
+        <label style="width:160px;">输入用户名: </label>
+        <br><textarea name="usernames" rows="10" cols="25"></textarea>
+        <br><input type="submit" class="btn btn-info" style="width:90px;" value="打印条形码">
+    </form>
+</fieldset>
+
+{% endblock %}

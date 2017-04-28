@@ -1,0 +1,35 @@
+{% extends "base_header.html" %}
+
+{% block content %}
+
+<div class="alert alert-warning alert-dismissable">
+    <strong style="font-size:20px;">1、所有csv上传前用记事本打开另存为utf-8格式<br>
+    </strong>
+</div>
+
+<form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="#">
+    {% csrf_token %}
+    <div>
+        <input type="hidden" name="type" value="bulk_print_barcode">
+        <label class="control-label" style="width:150px">批量打印产品条码:</label>
+        <div class="form-group">
+            <input type="file" class="input-file" name="csvFile">
+        </div>
+        
+        <label class="control-label" style="width:70px">选择仓库:</label>
+        <select name="depot" style="height:34px;width:101px;">
+            <option value='1'>广州默认仓库</option>
+            <option value='2'>南京默认仓库</option>
+        </select>
+        <label class="control-label" style="width:70px">水洗唛:</label>
+        <select name="wash_mark" style="height:34px;width:101px;">
+            <option value='0'>不需要</option>
+            <option value='1'>需要</option>
+        </select>
+        <button type="submit" class="btn btn-small btn-primary btn111">上传</button>
+        <span style="color:red;"> (表格格式:sku, 数量.  注意另存为utf-8)</span>
+    </div>
+</form>
+<br>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base_header.html" %}
+
+{% block content %}
+
+{% if success %}
+    <div class="alert alert-warning alert-dismissable">
+        <strong style="font-size:20px;">{{ msg }}</strong>
+    </div>
+{% endif %}
+<div class="alert alert-warning alert-dismissable">
+    <strong style="font-size:20px;">
+        1、此界面只能扫描入库物理仓是南京仓的属性产品<br>
+        2、采购条目成本审核通过，且产品重量和库位不为空，才会出现在待入库界面<br>
+        3、本次操作入库的数据，可在<a href="/admin/depot/depotinlog/?type__exact=0" target="_blank">“入库记录”</a>界面查看。</strong>
+</div>
+
+<form class="form-inline" role="form" id="itemin_form" action="#" method="post" style="float:left;">
+    {% csrf_token %}
+    <input type="hidden" name="type" value="itemin_formal">
+    <input type="hidden" name="depot" value="1">
+    <div>
+        <label style="font-size:60px;">SKU: </label>
+        <input style="font-size:30px;width:600px; height:70px;margin-bottom:30px;" type="text" class="form-control" id="sku" placeholder="Enter SKU" name='sku'>
+        <input style="font-size:40px;width:100px; height:70px;margin-bottom:30px;" type="hidden" class="form-control" id="itemin_number" value="1" name="itemin_number">
+        &nbsp;&nbsp;&nbsp;<button style="font-size:40px;width:150px; height:70px;margin-bottom:30px;" type="submit" class="btn btn-default btn-primary" >入库</button>
+    </div>
+</form>
+<br>
+
+<div id="check_div" style="float: left; width: 450px; box-shadow: 0px 0px 8px rgb(94, 94, 94); padding: 10px; margin: 200px 0px 0px 20px; border: 5px solid rgb(163, 164, 165); position: fixed; background: rgb(255, 255, 255) none repeat scroll 0% 0%; left: 30%; top: 50px; display: none;">
+    <div>
+        <span style="font-size:15px;">提示</span>
+        <a style="float:right;font-size:16px;font-weight:bolder;" href="javascript:;" id="check_close">×</a>
+    </div>
+    <hr size="1">
+    <div style="margin:10px 30px 20px 30px;text-align:center;font-size:16px;" id="pick_msg"></div>
+    <hr size="1">
+    <div style="text-align:center;margin-bottom:20px;">
+        <button id="check_close1" class="btn btn-default" onclick='$("#sku")[0].focus()'>我知道了</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#sku")[0].focus();
+        var msg = "{{ msg }}"
+        $("#pick_msg").html(msg);
+        {% if err %}
+            $("#check_div").show();
+            $("#check_close1")[0].focus();
+        {% endif %}
+        $("#check_close, #check_close1").click(function(){
+            $("#check_div").hide();
+        })    
+    })
+</script>
+{% endblock %}

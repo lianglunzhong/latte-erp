@@ -1,0 +1,51 @@
+{% extends "base_header.html" %}
+
+{% block content %}
+
+{% if success %}
+    <div class="alert alert-warning alert-dismissable">
+        <strong style="font-size:20px;">{{ msg }}</strong>
+    </div>
+{% endif %}
+<div class="alert alert-warning alert-dismissable">
+    <strong style="font-size:20px;">1、所有csv上传前用记事本打开另存为utf-8格式<br>
+        2、更新产品时，根据choies的model号匹配，此model号已存在就针对此产品进行修改<br>
+        3、更新产品的字段有：'中文名称','英文名称','参考成本','供应商名称','供应商货号','供应商产品采购链接'<br>
+        4、当前更新的产品供应商在针对此产品采购时的等级为1，若该产品在系统中存在采购供应商则采购等级调成10<br>
+    </strong>
+</div>
+
+<form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="#">
+    {% csrf_token %}
+    <div>
+        <!--<input type="hidden" name="type" value="multi_import_product">-->
+        <input type="hidden" name="type" value="bulk_import_product">
+        <label class="control-label" style="width:150px">批量导入ky或ws的产品:</label>
+        <div class="form-group">
+            <input type="file" class="input-file" name="csvFile">
+        </div>
+        <button type="submit" class="btn btn-small btn-primary btn111">上传</button>
+        <a href="/static/downloadfiles/import_update_product.csv">格式下载</a>
+        <span style="color:red;"> (注: 所有csv上传前用记事本打开另存为utf-8格式)</span>
+    </div>
+</form>
+<br>
+<br>
+
+<form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="#">
+    {% csrf_token %}
+    <div>
+        <!--<input type="hidden" name="type" value="multi_import_product">-->
+        <input type="hidden" name="type" value="import_update_product">
+        <label class="control-label" style="width:150px">批量导入ky或ws的更新产品:</label>
+        <div class="form-group">
+            <input type="file" class="input-file" name="csvFile">
+        </div>
+        <button type="submit" class="btn btn-small btn-primary btn111">上传</button>
+        <a href="/static/downloadfiles/import_update_product.csv">格式下载</a>
+        <span style="color:red;"> (注: 所有csv上传前用记事本打开另存为utf-8格式)</span>
+    </div>
+</form>
+
+<br>
+{% endblock %}

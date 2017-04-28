@@ -1,0 +1,106 @@
+{% extends "base_header.html" %}
+
+{% block content %}
+
+{% if success %}
+    <div class="alert alert-warning alert-dismissable">
+        <strong style="font-size:20px;">{{ msg }}</strong>
+    </div>
+{% endif %}
+
+
+<!--<table class="table table-bordered" style="width:33%;float:left">-->
+    <!--<thead>-->
+    <!--<tr>-->
+        <!--<td>已对单未审核&#45;&#45;采购列表( <span style="color:red;">数量:{{ cost_not_approves|length }}</span> )</td>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <!--{% for i in cost_not_approves %}-->
+    <!--<tr>-->
+        <!--<td><a href="/admin/workstation/purchaseorderitem/{{ i }}/">{{ i }}</a></td>-->
+    <!--</tr>-->
+    <!--{% endfor %}-->
+<!--</table>-->
+<table class="table table-bordered" style="width:33%;float:left">
+    <thead>
+    <tr>
+        <td colspan="2">产品重量为0( <span style="color:red;">数量:{{ not_weights|length }}</span> )</td>
+    </tr>
+    </thead>
+    {% for k in not_weights %}
+    <tr>
+        <td><a href="/admin/product/item/{{ k.item_id }}/">{{ k.item__sku }}</a></td>
+        <td>
+            <input disabled class="" value="{{ k.item__weight }}" type="text" id="weight_{{ k.item_id }}" style="width:60px;">
+            <a class="btn btn-default btn111" id="btn_{{ k.item_id }}" href="javascript:update_weight('{{ k.item_id }}','{{ k.item__weight }}','{{ k.item__sku }}')">更新</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<table class="table table-bordered" style="width:33%;float:left">
+    <thead>
+    <tr>
+        <td>未传库位产品( <span style="color:red;">数量:{{ not_locations|length }}</span> )</td>
+    </tr>
+    </thead>
+    <tr>
+    <td>
+    <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="#">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="export_no_location">
+        <button type="submit" class="btn btn-small btn-primary">下载未录入库位sku</button>
+    </form>
+    </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    function toNext(frm){
+        if(window.event.keyCode==13){
+            frm.itemin_number.focus();
+            frm.itemin_number.select();
+            window.event.returnValue = false;
+        }
+    }
+    function update_weight(id,old_weight,model){
+        var rea = window.prompt("重量：");
+        var weight = $('#weight_'+id).val()
+
+        if(typeof(rea) == "undefined" || rea=='' || isNaN(rea)){
+                alert("请填写数字重量")
+                return false
+        }else{
+            console.log(id,rea,model)
+            $.post(
+                '/supply/supplier/ajax_item_weight',
+                {id:id,weight:rea,model:model,},
+                function (data) {
+                    if (data){
+                        // alert("修改成功!")
+                        $('#weight_'+id).val(rea)
+                        $('#btn_'+id).attr('onclick',"javascript:update_weight('"+id+"','"+rea+"','"+model+"')")
+                    }else{
+                        // alert("修改失败!")
+                        $('#weight_'+id).val(old_weight)
+                    }
+                },
+                'json'
+            )
+        }
+    }
+    <!--$(document).ready(function(){-->
+        <!--$("#sku")[0].focus();-->
+        <!--var msg = "{{ msg }}"-->
+        <!--$("#pick_msg").html(msg);-->
+        <!--{% if err %}-->
+            <!--$("#check_div").show();-->
+            <!--$("#check_close1")[0].focus();-->
+        <!--{% endif %}-->
+        <!--$("#check_close, #check_close1").click(function(){-->
+            <!--$("#check_div").hide();-->
+        <!--})-->
+    <!--})-->
+</script>
+
+{% endblock %}

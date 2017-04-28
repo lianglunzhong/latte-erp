@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>仓库发货拣货单</title> 
+
+<!-- Bootstrap core CSS -->
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<script src="/static/js/jquery-1.4.2.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+
+
+<style>
+table {width:100%;}
+th,td{
+    padding:5px;
+    line-height:1.428571429;
+    vertical-align:text-bottom;
+    border-top:1px solid #ddd
+}
+</style>
+</head>
+<body style="padding-top:0px;padding-bottom:30px;">
+    {% for pickdata in pick_list %}
+        {% if forloop.counter == 1 %}
+            <div style="align:center;margin:2px 10px 0 10px;">
+        {% else %}
+            <div style="align:center;margin:2px 10px 0 10px;page-break-before:always;">
+        {% endif %}
+
+        <table class="table-bordered">
+            <tbody>
+            <tr>
+                <td colspan="5">
+                    <h4 style="margin:auto;text-align:center;">
+                        仓库发货拣货单
+                        <button class="print_page" style="font-size:14px;margin-left:10px;">打印</button>
+                    </h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">仓库: {{ pickdata.pick.get_code_display }}</td>
+                <td>物流: {{ pickdata.pick.shipping }}</td>
+                <td>类型: {{ pickdata.pick.get_pick_type_display }}</td>
+                <td>
+                    <img src="{{ barcode128 }}{{ pickdata.pick.pick_num }}" width="250" height="50">
+                    <div style="font-size:13px;padding-left:10px;">{{ pickdata.pick.pick_num }}</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">建单人: {{ pickdata.pick.user_adder }}</td>
+                <td colspan="2">建单时间: {{ pickdata.pick.created|date:"Y-m-d H:i:s" }}</td>
+                <td>打印时间: {% if pickdata.pick.print_time %}{{ pickdata.pick.print_time|date:"Y-m-d H:i:s" }}{% else %}{% now "Y-m-d H:i:s" %}{% endif %}</td>
+            </tr>
+            {% if pickdata.pick_items %}
+                {% for pitem in pickdata.pick_items %}
+                    {% if forloop.counter0|divisibleby:"25" %}
+                {% if forloop.counter0 %}
+                    <tr style="page-break-before:always;height:50px;">
+                {% else %}
+                    <tr style="height:50px;">
+                {% endif %}
+                        <th style="width:8%">序号</th>
+                        <th style="width:17%">库位</th>
+                        <th style="width:50%">SKU</th>
+                        <th style="width:8%">数量</th>
+                        <th style="width:17%">品名&nbsp;&nbsp;&nbsp;&nbsp;(<a href="javascript:;" class="show_package">Package详情</a>)</th>
+                    <tr>
+                    {% endif %}
+                    <tr id="pitem_{{ pitem.depot_item_id }}" class="pick_item">
+                        <td class="number">{{ forloop.counter }}</td>
+                        <td>{{ pitem.position }}</td>
+                        <td>{{ pitem.sku }} &nbsp;&nbsp;({{ pitem.choies_sku }})</td>
+                        <td>
+                            {% if pitem.qty > 1 %}
+                            <span style="font-weight:bolder;font-size:24px;line-height: 0.1;">
+                            **{{ pitem.qty }}**
+                            </span>
+                            {% else %}
+                            {{ pitem.qty }}
+                            {% endif %}
+                        </td>
+                        <td>
+                        <div>
+                        {{ pitem.cn_name }}
+                        {% if pickdata.pick.pick_type == 3 %}
+                        <span style="float:right;">{{ pickdata.pick.id }}</span></div>
+                        {% endif %}
+                        <div class="package_list" style="display:none;">(
+                        {% for package_id, qty in pitem.package_ids.iteritems %}
+                            {{ package_id }}: {{ qty }},
+                        {% endfor %}
+                        )</div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            <tr>
+                <td colspan="5">
+                当前拣货单({{ pickdata.pick.id }}) 共有：包裹数({{ pickdata.package_total }})， SKU货品种数({{ pickdata.sku_total }})，货品总数({{ pickdata.item_total }})。
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"><span>拣货人(签名): </span></td>
+                <td><span>拣货日期: </span></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    {% endfor %}
+
+    <script type="text/javascript">
+    $(function(){
+        $(".show_package").click(function(){
+            $(".package_list").toggle();
+        })
+
+        $(".print_page").click(function(){
+            $(".print_page").hide();
+            // set_printer
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'pick_list' 'print' %}",
+                dataType: "json",
+                async : false,
+                data: "pick_ids={{ pick_ids }}",
+                success: function(res){
+                }
+            })
+            window.print();
+            return false;
+        })
+    })
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+{% extends "base_header.html" %}
+{% block content %}
+<style>
+    .jiacu{
+        text-align: center;
+        font-weight: bold;
+    }
+    .jiada{
+        font-size: 25px;
+    }
+</style>
+
+<form class="form-inline" id="pick_num_form" method="get">
+    <label style="width:240px;">扫描/录入拣货单号开始包装: </label>
+    <input type="hidden" name="type" value="start_packaging">
+    {% if packages %}
+    <span id="pick_num_span">
+        <span style="width:300px;font-size:16px;margin-right:10px;">当前拣货单号: {{ pick.pick_num }} </span>
+        <a href="javascript:;" id="reset_search">重新扫描拣货单</a>
+    </span>
+    <span id="pick_input_span" style="display:none;">
+    {% else %}
+    <span>
+    {% endif %}
+        <input type="text" class="form-control" name="pick_num" id="pick_num" value="" style="width:300px;">
+        <input type="submit" class="btn btn-primary" value="submit">
+    </span>
+</form>
+
+{% if picks and not packages %}
+<br>
+<table class="table-bordered">
+    <thead>
+        <tr>
+            <th style="width:18%;">NO.</th>
+            <th style="width:18%;">拣货单号</th>
+            <th style="width:18%;">实体仓库</th>
+            <th style="width:18%;">物流方式</th>
+            <th style="width:18%;">拣货单类型</th>
+            <th style="width:18%;">拣货单状态</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pick in picks %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ pick.pick_num }}</td>
+            <td>{{ pick.get_code_display }}</td>
+            <td>{{ pick.shipping }}</td>
+            <td>{{ pick.get_pick_type_display }}</td>
+            <td>多多包装中</td>
+        </tr>
+        {% endfor %}
+    </tbody>                  
+</table>
+{% endif %}
+
+{% if packages %}
+<form class="form-inline" id="sku_form">
+    <label style="width:240px;">扫描单品SKU开始包装: </label>
+    <input type="text" class="form-control" name="sku" id="sku" style="width:300px;">
+    <input type="submit" class="btn btn-primary" value="submit">
+</form>
+<br>
+<div id="search_table" style="margin-left:10%;">
+    <form method="post" action="" id="packaging_form">
+        <table class="table-bordered" id="search_item">
+            <tr>
+                <td style="width:400px;text-align:center;margin:10px 10px 0 10px;font-size:16px;font-weight:bolder;">SKU</td>
+                <td style="width:400px;text-align:center;margin:10px 10px 0 10px;font-size:16px;font-weight:bolder;">扫描数量</td>
+            </tr>
+        </table>
+        <table class="table-bordered">
+            <tr>
+                <td style="width:400px;border:1px solid #FFF;"></td>
+                <td style="width:400px;border:1px solid #FFF;">
+                    <input type="submit" class="btn btn-success" style="float:right;" value="此框已扫完">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div style="margin:30px 10px;width:90%;" id="pick_div">
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th width="4%">NO.</th>
+                <th width="8%">拣货单号</th>
+                <th width="8%">Package Id</th>
+                <th width="8%">物流方式</th>
+                <th width="10%">追踪号</th>
+                <th width="8%">Shop</th>
+                <th width="15%">Note</th>
+                <th width="15%">SKU</th>
+                <th width="8%">总数量</th>
+                <th width="8%">状态</th>
+            </tr>
+        </thead>
+        <tbody id="pick_data">
+            {% for package in packages %}
+                {% for item in package.items %}
+                <tr {% if package.index|divisibleby:2 %} class="background-double"{% endif %}>
+                    {% if forloop.first %}
+                        <td rowspan="{{ forloop.revcounter }}">{{forloop.parentloop.counter}}<span id="pick_package_{{ forloop.parentloop.counter }}" style="display:none;">{{ package.index }}</span></td>
+                        <td rowspan="{{ forloop.revcounter }}">{{ pick.pick_num }}</td>
+                        <td rowspan="{{ forloop.revcounter }}" id="package_{{ forloop.parentloop.counter }}" class="package_id">{{ package.id }}</td>
+                        <td rowspan="{{ forloop.revcounter }}" class="ship_type">{{ pick.shipping }}</td>
+                        <td rowspan="{{ forloop.revcounter }}" id="tracking_no_{{ forloop.parentloop.counter }}" class="tracking_no">{{ package.tracking_no }}</td>
+                        <td rowspan="{{ forloop.revcounter }}" id="shop_{{ forloop.parentloop.counter }}" >{{ package.shop }}</td>
+                        <td rowspan="{{ forloop.revcounter }}" id="note_{{ forloop.parentloop.counter }}">{{ package.package_note }}|{{ package.order_note }}</td>
+                    {% endif %}
+                    <td class="pick_sku" id="pick_sku_{{ item.id }}" title="{{ package.id }}">
+                        <span class="btn btn-xs btn-info copy_sku erp_sku">{{ item.sku }}</span>
+                        {% if item.choies_sku %}
+                            <br> <span class="btn btn-xs btn-default copy_sku ws_sku">{{ item.choies_sku }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="item_qty" id="item_qty_{{ item.id }}"> {{ item.qty }} </td>
+                    {% if forloop.first %}
+                        <td rowspan="{{ forloop.revcounter }}" class="package_status" id="package_status_{{ package.id }}">{% if package.pick_status == 3 %} 包装完成 {% endif %}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="margin-bottom:20px;float:right;">
+        <form action="" method="post" id="finish_packaging">
+            <input type="submit" class="btn btn-success" value="拣货单包装完成">
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<div id="check_div" style="float: left; width: 450px; box-shadow: 0px 0px 8px rgb(94, 94, 94); padding: 10px; margin: 200px 0px 0px 20px; border: 5px solid rgb(163, 164, 165); position: fixed; background: rgb(255, 255, 255) none repeat scroll 0% 0%; left: 30%; top: 50px; display: none;">
+    <div>
+        <span style="font-size:15px;">提示</span>
+    </div>
+    <hr size="1">
+    <div style="margin:10px 30px 20px 30px;text-align:center;font-size:16px;" id="pick_msg"></div>
+    <hr size="1">
+    <div style="text-align:center;margin-bottom:20px;">
+        <br>
+        <button id="check_close" class="btn btn-info" href="javascript:;">我知道了</button>
+    </div>
+</div>
+
+<iframe id="print_iframe" src="" style="display:none;"></iframe>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        // sku获得焦点时的事件
+        $("#sku").focus(function(){
+            $("#sku").select();
+        })
+
+        $(".copy_sku").each(function(){
+            $(this).click(function(){
+                $("#sku").val($(this).text());
+                $("#sku").focus();
+            });
+        })
+
+        // 设置弹出框
+        $("#check_close").click(function(){
+            $("#check_div").hide();
+            $("#sku").focus();
+        })
+
+        // 设置不同package的背景色
+        $(".background-double").css('background-color', '#F5F5F5');
+
+        // 重设搜索拣货单的输入框
+        $("#reset_search").click(function(){
+            $("#pick_num_span").hide();
+            $("#pick_input_span").show();
+            return false;
+        });
+
+        // 扫描sku, 保存已扫描信息
+        $("#sku_form").submit(function(){
+            var sku = $("#sku").val();
+            if(sku == 'complete'){
+                $("#packaging_form").submit();
+                return false;
+            }else{
+
+                // 先判断扫描的sku是否在未包装的包裹列表中
+                var sku_found = 0;
+                var show_erp_sku = '';
+                var show_ws_sku = '';
+                $(".pick_sku").each(function(){
+                    // 先判断sku是否为旧的sku, 如果是旧的sku, 那么转化成对应的新sku
+                    var pick_package = $(this).attr('title');
+                    var package_finish = $("#package_status_" + pick_package).html();
+                    var ws_sku = $(this).find(".ws_sku").html();
+                    var erp_sku = $(this).find(".erp_sku").html();
+                    if(!package_finish && (sku == ws_sku || sku == erp_sku)){
+                        sku_found = 1;
+                        show_erp_sku = erp_sku;
+                        show_ws_sku = ws_sku;
+                    }
+                });
+                if(!sku_found){
+                    $("#pick_msg").html('SKU不存在或不在未包装列表中');
+                    $("#check_div").show();
+                    return false;
+                }
+                
+                var qty = 1;
+                var checked = 0;
+                $("#search_item").find('.search_sku').each(function(){
+                    var search_sku = $(this).html();
+                    if (search_sku == show_erp_sku){
+                        checked = 1;
+                        var search_qty = $(this).parent().parent().find('.search_qty').html();
+                        search_qty = parseInt(search_qty) + qty;
+                        $(this).parent().parent().find('.search_qty').html(search_qty);
+                    }
+                })
+                if(!checked){
+                    var sku_tr = '<tr class="search_tr"><td><span class="jiacu jiada search_sku">'+show_erp_sku+'</span><br>(' + show_ws_sku + ')</td><td class="jiacu search_qty">'+qty+'</td></tr>';
+                    $("#search_item").append(sku_tr);
+                }
+                $("#sku").focus();
+                return false;
+            };
+
+        });
+        
+        // 提交保存的信息, 去后台匹配对应的包裹
+        $("#packaging_form").submit(function(){
+            var package_items = {};
+            $("#search_item").find('.search_sku').each(function(){
+                var s_sku = $(this).html();
+                var s_qty = $(this).parent().parent().find('.search_qty').html();
+                package_items[s_sku] = s_qty;
+            })
+            if($.isEmptyObject(package_items)){
+                return false;
+            }
+            // alert(package_items);
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'pick_packaging' %}",
+                dataType: "json",
+                async : false,
+                data: {
+                    "type": "map_package",
+                    "pick_num": "{{ pick.pick_num }}",
+                    "packageitems": JSON.stringify(package_items),
+                },
+                success: function(res){
+                    if(!res['success']){
+                        // 匹配失败, 则弹出确认对话框, 是否要关闭窗口
+                        if(!confirm(res['msg'])){
+                            $("#sku").focus()
+                            return false;
+                        }else{
+                            $("#search_item").find('.search_tr').remove();
+                            $("#sku").focus()
+                        }
+                    }else{
+                        // 匹配成功, 则打印面单
+                        $("#package_status_"+res['package']['id']).text('包装完成');
+                        var iframe_src = '/pick/print_label?pick_type={{ pick.pick_type }}' + '&package_list=' + res['package']['id'];
+                        $("#print_iframe").attr('src', iframe_src);
+                        $("#print_iframe").load(function(){
+                            $("#print_iframe")[0].contentWindow.focus();
+                            $("#print_iframe")[0].contentWindow.print();
+                        });
+                        $("#search_item").find('.search_tr').remove();
+                    };
+                    return false;
+
+                }
+            });
+            return false;
+        });
+        
+        // 完成当前拣货单
+        $("#finish_packaging").submit(function(){
+            if(!can_finish()){
+                if(!confirm('还有包裹没有分拣完毕,确定要完成拣货单么?')){
+                    return false;
+                }
+            }
+            finish_packaging();
+        });
+    });
+    
+
+    function can_finish(){
+        result = true;
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'pick_packaging' %}",
+            dataType: "json",
+            async : false,
+            data: {
+                "type": "can_finish",
+                "pick_num": "{{ pick.pick_num }}",
+            },
+            success: function(res){
+                result = res['success'];
+            }
+        });
+        return result;
+    }
+
+
+    function finish_packaging(){
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'pick_packaging' %}",
+            dataType: "json",
+            async : false,
+            data: {
+                "type": "finish_packaging",
+                "pick_num": "{{ pick.pick_num }}",
+            },
+            success: function(res){
+                var message = '拣货单已标记包装完成';
+                $("#pick_msg").html(message);
+                $("#check_div").show();
+                location.href=res['path'];
+            }
+        })
+    }
+
+    function open_single_link(ship_type, package_id){
+        $.ajax({
+            type: 'POST',
+            url: "/pick/ajax_process",
+            dataType: "json",
+            // data: "type=get_single_link&ship_type=" + ship_type + "&package_id=" + package_id,
+            data: {
+                "type": "get_single_link",
+                "ship_type": "ship_type",
+                "package_id": "package_id",
+            },
+            success: function(res){
+                if(res['success'])
+                {
+                    $("#sku").focus();
+                    window.open(res['single_link']);
+                }
+                else
+                {
+                    alert(res['msg']);
+                }
+            }
+        })
+    }
+</script>
+{% endblock %}

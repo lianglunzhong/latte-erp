@@ -1,0 +1,52 @@
+<style>
+table {border-collapse:collapse;border-spacing:0;display:table;}
+td{padding:0;}
+</style>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"></head>
+<body>
+    {% for user in users %}
+    <table style="page-break-before: atuo;">
+        <tbody><tr>
+        <td>
+        <table style="float: block;position:relative;cursor: default;font-size: 12px;font-family: Verdana, Arial, Helvetica, sans-serif; letter-spacing: normal; orphans: auto; text-indent: 0px; text-transform: none; widows: auto; word-spacing: 0px; -webkit-text-stroke  -width: 0px; background-color: #ffffff;  color:   #000000;" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="250" align="left">
+            <tbody>
+            <tr>
+            <td style="color: #000000; font-family: Verdana, Arial, Helvetica, sans-  serif; font-size: 10px; cursor: text;font-weight:bold;" bgcolor="#fff" valign="middle" align="center" height="25">
+                <span class="kewei" style="float:center;font-weight:bold;font-size:28px;">{{ user.firstname }}</span>
+            </td>
+            </tr>
+            <tr>
+            <td align="center">
+            <table width="100%">
+            <tr>
+                <td align="center"><span style="font-size:18px;">{{ user.lastname }}</span></td>
+            </tr>
+            </table>
+            
+            </td>
+            </tr>
+            <tr>
+            <td style="color: #000000; cursor: text;" bgcolor="#fff" valign="middle" align="center" height="50">
+            <table style="cursor: default; text-align: center;" border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tbody>
+            <tr>
+            <td style="cursor: text;font-size:10px;" valign="top" width="100%" align="center" >
+            <img src="{{ barcode128 }}{{ user.username }}" width="480" height="60">
+            <span style="float:center;font-weight:bold;font-size:28px; position: relative;bottom: 5px;">{{ user.username }}</span>
+            </tr>
+            </tbody>
+            </table>
+            </td>
+            </tr>    
+            </tbody>
+        </table>
+        </td>
+        </tr>
+        </tbody></table>
+    {% endfor %}
+    
+
+    
+</body>
+</html>

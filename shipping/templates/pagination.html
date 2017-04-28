@@ -1,0 +1,53 @@
+{% if objs %}
+    <div class="pagination">
+        <li class="prev-na">
+            {% if objs.has_previous %}
+                <a href="?p={{ objs.previous_page_number }}">«</a>
+            {% else %}
+                <a href="#">«</a>
+            {% endif %}
+        </li>
+        <li class="active" title="Current Page">
+            <a href="#">
+                Page {{ objs.number }} of {{ objs.paginator.num_pages }}
+            </a>
+        </li>
+        <li class="next-na">
+            {% if objs.has_next %}
+                <a href="?p={{ objs.next_page_number }}">»</a>
+            {% else %}
+                <a href="#">»</a>
+            {% endif %}
+        </li>
+        <label style="padding:7px 10px;">
+            ( {{ objs.start_index }} ~ {{ objs.end_index }} / {{ objs.paginator.count }} )
+        </label>
+    </div>
+{% endif %}
+
+<script>
+    $(document).ready(function(){
+        var gets_val = '';
+        {% for key, value in gets.items %}
+            $("#{{ key }}").val('{{ value }}');
+            {% if key != 'p' %}
+                gets_val += '{{ key }}={{ value }}&';
+            {% endif %}
+        {% endfor %}
+        gets_val = gets_val.substr(0, gets_val.length - 1);
+
+        $(".pagination a").click(function(){
+            var aval = $(this).attr('href');
+            if(aval == '#')
+            {
+                return false;
+            }
+            else
+            {
+                link = aval + '&' + gets_val;
+            }
+            window.location.href = link;
+            return false;
+        })
+    });
+</script>

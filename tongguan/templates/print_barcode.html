@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    
+    <style type="text/css">
+        .not_need_rotate_div
+        {
+            width: 280px;
+            height: 100px;
+            background-color: ;
+            float: left;
+            clear: both;
+            font-size: 11px;
+
+        }
+        
+        .inner1 {
+            height:15px;
+            width:280px;
+            text-align: center;
+            font-size:18px;
+            font-weight:bold;
+        }
+
+        .inner2 {
+            margin-top: 2px;
+            height:18px;
+            width:280px;
+        }
+
+        .inner2 div {
+            width:93px;
+            font-size:10px;
+            float: left;
+        }
+
+        .inner2 > div:nth-child(1){
+            text-align: left;
+            width:63px;
+        }
+
+        .inner2 > div:nth-child(2){
+
+            text-align: center;
+            width:153px;
+        }
+
+        .inner2 > div:nth-child(3){
+
+            text-align: right;
+            width:63px;
+        }
+
+        .inner3 {
+            height:45px;
+            width:280px;
+        }
+        .inner4 {
+            height:15px;
+            width:280px;
+            text-align: center;
+            font-size:18px;
+            font-weight:bold;
+        }
+        
+        .wash_attach
+        {
+            width: 20px;
+            height: 90px;
+            background-color: blue;
+            float: left;
+
+        }
+    </style>
+
+
+</head>
+<body>
+{% for obj in objs %}
+    <div class="not_need_rotate_div">
+        <div class="inner1">{{ obj.position }}</div>
+        <div class="inner2">
+            <div>{{ obj.print_time }}{{ obj.depot|slice:"2" }}</div>
+            <div>{{ obj.cn_name|slice:"10" }}</div>
+            <div>{{ obj.id }}</div>
+        </div>
+        <div class="inner3"><img src="{{ barcode128 }}{{ obj.sku }}" alt="" height="40px" width="280px"></div>
+        <div class="inner4" >{{ obj.sku }}</div>
+    </div>
+    <br />
+    {% if obj.wash_mark %}
+        <div class="not_need_rotate_div">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+              <text x="0" y="8" fill="black" transform="rotate(90 42,47)">GB:</text>
+              <text x="0" y="8" fill="black" transform="rotate(90 31,41)">wool wash</text>
+              <text x="0" y="8" fill="black" transform="rotate(90 25,35)">process do not</text>
+              <text x="0" y="8" fill="black" transform="rotate(90 18,29)">bleach do not</text>
+              <text x="0" y="8" fill="black" transform="rotate(90 11,22)">tumble dry cool</text>
+              <text x="0" y="8" fill="black" transform="rotate(90 4,15)">lron</text>
+              <image x="65" y="8" width="90" height="70" xlink:href="/static/label_img/get_Washing_mark12.jpg" />
+              <image x="90" y="3" width="130" height="85" xlink:href="/static/label_img/get_Washing_mark11.jpg" />
+              <text x="0" y="15" fill="black" transform="rotate(90 140,145)">{{ obj.kind }}</text>
+              <text x="0" y="15" fill="black" transform="rotate(90 130,135)">{{ obj.category }}</text>
+                {% for item in obj.material %}
+                    <text x="0" y="15" fill="black" transform="rotate(90 {{ item.place_x }},{{ item.place_y }})">{{ item.content }}</text>
+                {% endfor %}
+            </svg>
+        </div>
+        <br />
+    {% endif %}
+{% endfor %}
+
+</svg>
+</body>
+</html>

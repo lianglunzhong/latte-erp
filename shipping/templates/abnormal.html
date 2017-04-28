@@ -1,0 +1,183 @@
+{% extends "base_header.html" %}
+{% block content %}
+{% include "cxcalendar.html" %}
+
+<div style="color:red;">先参考<a href="javascript:;" onclick="$('#doc_div').show();">FAQ详情</a>，再打开package列表连接处理package</div>
+
+<form class="form-inline" role="form" id="iform" action="" method="get">
+    <!-- {% csrf_token %} -->
+    <input type="hidden" name="type" value="do_search">
+    <div>
+        <div class="form-grou">
+            <label>包裹ID:</label>
+            <input type="text" class="" id="package_id" value="" name="package_id" style="width:120px;">
+            <label>拣货单类型:</label>
+            <select name="pick_type" id="pick_type">
+                <option></option>
+                {% for key, pick_type in pick_types %}
+                    <option value="{{ key }}">{{ pick_type }}</option>
+                {% endfor %}
+            </select>
+            <label>异常类型:</label>
+            <select name="error_type" id="error_type">
+                <option></option>
+                {% for key, value in error_type %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+            <label>是否处理:</label>
+            <select name="is_processed" id="is_processed">
+                <option></option>
+                <option value="0">否</option>
+                <option value="1">是</option>
+            </select>
+            <label>异常产生时间: From</label>
+            <input type="text" class="date" id="created_from" value="" name="created_from"  style="width:100px;">
+            <label>To</label>
+            <input type="text" class="date" id="created_to" value="" name="created_to"  style="width:100px;">
+            <label>每页显示:</label>
+            <input type="text" class="" id="per_num" placeholder="100" value="" name="per_num"  style="width:40px;">
+            <button type="submit" class="btn btn-primary btn-default">提交检索</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit" onclick="location.href='{{ request.path }}';return false;" class="btn btn-default btn111">清空</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
+    </div>
+</form>
+<br>
+
+<iframe id="print_iframe" src="" style="display:none;"></iframe>
+
+<div id="table_div" style="overflow:scroll;width:95%;">
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th width="100">拣货单号<br>创建时间</th>
+                <th width="100">拣货单类型</th>
+                <th width="100">Package Id</th>
+                <th width="100">异常类型<br>异常产生时间</th>
+                <th width="120">PackageItem SKU</th>
+                <th width="100">库位</th>
+                <th width="80">要拣 / 已拣</th>
+                <th width="80">是否处理</th>
+                <th width="120">处理人 <br> 处理时间</th>
+                <th width="200">Action</th>
+            </tr>
+        </thead>
+        <tbody id="pick_data">
+            {% for obj in objs %}
+                {% for item in obj.packageitems %}
+                <tr {% if forloop.parentloop.counter|divisibleby:2 %} class="background-double"{% endif %}>
+                    {% if forloop.counter == 1 %}
+                    <td rowspan="{{ forloop.revcounter }}">
+                        {{ obj.package.pick.pick_num }} <br>
+                        {{ obj.package.pick.created|date:"m-d H:i:s" }}
+                    </td>
+                    <td rowspan="{{ forloop.revcounter }}">{{ obj.package.get_pick_type_display }}</td>
+                    <td rowspan="{{ forloop.revcounter }}">{{ obj.package_id }}</td>
+                    <td rowspan="{{ forloop.revcounter }}">
+                        {{ obj.get_error_type_display }} <br>
+                        {{ obj.created|date:"m-d H:i:s" }}
+                    </td>
+                    {% endif %}
+                    <td class="packageitem_sku">{{ item.sku }}</td>
+                    <td class="item_location">{{ item.position }}</td>
+                    <td class="pick_qty">{{ item.qty }} / {{ item.pick_qty }}</td>
+                    {% if forloop.counter == 1 %}
+                    <td rowspan="{{ forloop.revcounter }}" id="is_processed_{{ obj.id }}">
+                        {% if obj.is_processed %}
+                            是
+                        {% else %}
+                            否
+                        {% endif %}
+                    </td>
+                    <td rowspan="{{ forloop.revcounter }}" id="processor_{{ obj.id }}">{{ obj.processor.username }} <br> {{ obj.process_time|date:"m-d H:i:s" }}</td>
+                    <td rowspan="{{ forloop.revcounter }}">
+                        <a href="/admin/shipping/package/{{ obj.package.id }}/change/" target="_blank" class="btn btn-xs btn-primary" style="color:#fff;">包裹页</a>
+                        <a href="{% url 'print_label'  %}?&package_list={{ obj.package.id }}" target="_blank" class="btn btn-xs btn-info" style="color:#fff;">面单</a>
+                        {% if not obj.is_processed %}
+                            <a href="{% url 'pick_abnormal' %}" class="btn btn-xs btn-success mark_to_dealed" title="{{ obj.id }}" style="color:#fff;" id='mark_to_dealed_{{ obj.id }}'>标记已处理</a>
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    {% include "pagination.html" %}
+
+<div id="doc_div" style="float: left; width: 850px; box-shadow: 0px 0px 8px rgb(94, 94, 94); padding: 10px; margin: 100px 0px 0px 20px; border: 5px solid rgb(163, 164, 165); position: fixed; background: rgb(255, 255, 255) none repeat scroll 0% 0%; left: 15%; top: 50px; display: none;">
+    <div>
+        <span style="font-size:15px;font-weight:bolder;">Q1 配货时发现实物丢失(补拍）</span>
+        <a href="javascript:;" onclick="$('#doc_div').hide();">&times;</a>
+    </div>
+    <p></p>
+    <p>此步骤由仓储部操作（使用分拣系统发货的单据务必到“异常拣货单处理”处理）：</p>
+    <p>
+        1 修改包裹的状态为‘未处理’，添加包裹的单头备注‘产品 xxx实物丢失补拍’，然后保存；<br>
+        2 在包裹占用库存中，找到这个包裹的库存占用信息，勾选‘删除’，保存。<br>
+        3 需要立刻增加对应产品的的出库记录，备注‘产品XXX包裹分拣或包装时发现实物丢失’；<br>
+        4 更改包裹的状态为“开始处理”，（系统会重新生成采购需求，生成采购单后即可补采购）。<br>
+        5 包裹中所有已拣货物，全部返回货架，等货物到齐后（包裹的状态会自动变成‘配货中’），正常按照流程发货即可。
+    </p>
+    <div>
+        <span style="font-size:15px;font-weight:bolder;">Q2 配货时发现实物丢失(报缺）</span>
+    </div>
+    <p></p>
+    <p>此步骤由仓储部和客服部操作（使用分拣系统发货的单据请到“异常拣货单处理”处理）：</p>
+    <p>
+        1 修改包裹的状态为‘未处理’，添加包裹单头备注‘产品xxx实物丢失报缺’，然后保存；<br>
+        2 重新打开包裹，找到实物丢失的包裹产品，勾选‘是否已删除’，修改包裹状态为“打包中”，并保存(使用分拣系统的直接用“原面单重新打印”打印面单）；<br>
+        3 需要立刻增加对应产品的出库记录，备注‘产品XXX包裹分拣或包装时发现实物丢失'，并通知客服取消订单产品；<br>
+        4 客服联系客人报缺，并删除对应订单的属性产品（勾选订单属性产品的‘是否已删除’，并保存）。
+    </p>
+</div>
+
+<script>
+$(document).ready(function(){
+    // 设置不同package的背景色
+    $(".background-double").css('background-color', '#F5F5F5');
+
+    $('#created_from').cxCalendar();
+    $('#created_to').cxCalendar();
+
+    $(".mark_to_dealed").each(function(){
+        $(this).click(function(){
+            if(!confirm('确认异常已处理完毕?')){
+                return false;
+            }
+            error_id = $(this).attr('title');
+            result = mark_to_dealed(error_id);
+            if(result['success']){
+                $("#is_processed_"+error_id).html('是');
+                $("#processor_"+error_id).html(result['processor'] + ' <br> ' + result['process_time']);
+                $("#mark_to_dealed_"+error_id).remove();
+            }
+            return false;
+        });
+    });
+    
+});
+
+function mark_to_dealed(error_id){
+    result = '';
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'pick_abnormal' %}",
+        dataType: "json",
+        async : false,
+        data: {
+            "type": "finish_deal",
+            "error_id": error_id,
+        },
+        success: function(res){
+            result = res;
+        }
+    });
+    return result;
+}
+</script>
+
+{% endblock %}

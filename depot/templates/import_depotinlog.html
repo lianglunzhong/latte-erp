@@ -1,0 +1,98 @@
+{% extends "base_header.html" %}
+
+{% block title %}{{class_name}} {{flag}}{% endblock %}
+{% block content %}
+
+{% if success %}
+    <div class="alert alert-warning alert-dismissable">
+        <strong style="font-size:20px;">{{ msg }}</strong>
+    </div>
+{% endif %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <form class="form-horizontal" action="" method="post">
+            {% csrf_token %}
+            <fieldset>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">货品sku</label>
+                    <div class="col-lg-10">
+                        <input type="text" name="depot_id" value="2" style="display:none">
+                        <input type="text" name="item_sku">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">入库数量</label>
+                    <div class="col-lg-10">
+                        <input type="text" name="qty">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">入库单件成本</label>
+                    <div class="col-lg-10">
+                        <input type="text" name="cost">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">备注</label>
+                    <div class="col-lg-10">
+                        <input type="text" name="note">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">入库类型</label>
+                    <div class="col-lg-10">
+                        <select name="depotinlog_type">
+                            <option value="1">大批活动采入库</option>
+                            <option value="2">囤货入库</option>
+                            <option value="3">样品采入库</option>
+                            <option value="4">移库入库</option>
+                            <option value="5">杂入-made系统</option>
+                            <option value="6">杂入-新品？</option>
+                            <option value="7">杂入-生产手动？</option>
+                            <option value="8">杂入-订单退件</option>
+                            <option value="9">杂入-包裹取消</option>
+                            <option value="10">杂入-FBA调拨</option>
+                            <option value="11">杂入-换sku</option>
+                            <option value="12">杂入-改码</option>
+                            <option value="13">杂入-盘盈</option>
+                            <option value="14">杂入-福袋礼物</option>
+                            <option value="15">杂入-复检？</option>
+                            </select>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <input type="hidden" name="type" value="import_depotinlog_single">
+                        <!--<button type="reset" class="btn btn-default">Cancel</button>-->
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+
+    <div style="margin-top:300px;margin-left:200px">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="#">
+            {% csrf_token %}
+            <div>
+                <!--<input type="hidden" name="type" value="multi_import_product">-->
+                <input type="hidden" name="type" value="import_depotinlog_batch">
+                <input type="hidden" name="depot_id" value="2">
+                <label class="control-label" style="width:150px">南京仓批量杂入（杂入-made系统 / 移库入库）:</label>
+                <div class="form-group">
+                    <input type="file" class="input-file" name="csvFile">
+                </div>
+                <button type="submit" class="btn btn-small btn-primary btn111">上传表格</button>
+                <a href="/static/downloadfiles/depotinlog.csv">格式下载</a>
+                <span style="color:red;"> (注: 所有csv上传前用记事本打开另存为utf-8格式)</span>
+            </div>
+        </form>
+    </div>
+
+    </div>
+</div>
+
+{% endblock %}

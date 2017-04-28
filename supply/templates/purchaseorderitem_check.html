@@ -1,0 +1,246 @@
+{% extends "base_header.html" %}
+{% load tags %}
+{% block content %}
+
+{% if success %}
+    <div class="alert alert-warning alert-dismissable">
+        <strong style="font-size:20px;">{{ msg }}</strong>
+    </div>
+{% endif %}
+
+<!-- 这里是搜索模板 -->
+{% include "purchaseordersearch.html" %}
+
+<br>
+<form class="form-inline" role="form" id="uform" action="{{ request.path }}" method="post">
+    {% csrf_token %}
+    <input type="hidden" id="type" name="type" value="do_check">
+    <!--<input type="hidden" id="checkorder_receive" name="checkorder_receive" value="">-->
+    <button type="button" class="btn btn-primary" id="package_click">确认对单</button>
+
+    <button type="button" class="btn btn-primary" id="export_csv" style="float: right;">导出对单</button>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="checkall">采购产品ID </th>
+                <th>采购单ID</th>
+                <th>item-SKU</th>
+                <th>尺码</th>
+                <th>入库仓库</th>
+                <th>图片</th>
+                <th>采购数量</th>
+                <th>已入库数量</th>
+                <th>已对单数量</th>
+                <th>当前对单数量</th>
+                <th>采购单生成时间</th>
+                <th>采购单状态</th>
+                <th>采购条目处理状态</th>
+                <th>采购条目对单状态</th>
+                <th>采购条目入库状态</th>
+                <th>重量</th>
+                <th>供应商</th>
+                <th>供应商sku</th>
+                <th>国内物流号</th>
+                <th>备注</th>
+                <th>单据录入人</th>
+                <th>采购人</th>
+                <th>对单记录</th>
+                <th>最后修改时间</th>
+                <th>残次记录</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for obj in info %}
+        <tr>
+            <td><input type="checkbox" name="purchase_item_id" value="{{ obj.id }}"><a href="/admin/supply/purchaseorderitem/{{ obj.id }}">{{ obj.id }}</a> </td>
+            <td><a href="/admin/supply/purchaseorder/{{ obj.purchaseorder.id }}">{{ obj.purchaseorder.id }}</a></td>
+            <td><a href="{{ obj.item.product.choies_site_url }}" target="_blank">{{ obj.item.sku }}</a></td>
+            <td>{{ obj.item_size}}</td>
+            <td>{{ obj.purchaseorder.depot }}</td>
+            <td><a href="{{ obj.item.product.get_image }}" target="_blank"><img src="{{ obj.item.product.get_image }}" ></a></td>
+            <td>{{ obj.qty }}</td>
+            <td>{{ obj.depotinlog_qty }}</td>
+            <td>{{ obj.real_qty }}</td>
+            <td><input class="current_real_qty" value="0" type="text" id="current_real_qty_{{ obj.id }}" style="width:60px;"></td>
+            <td>{{ obj.purchaseorder.created|date:"Y-m-d" }}</td>
+            <td>{{ obj.purchaseorder.get_status_display }}</td>
+            <td>{{ obj.get_status_display }}</td>
+            <td>{{ obj.get_action_status_display }}</td>
+            <td>{{ obj.get_in_status_display}}</td>
+
+
+            <td>
+                <input disabled class="weight" value="{{ obj.item.weight }}" type="text" id="weight_{{ obj.item.id }}" style="width:60px;">
+                <a class="btn btn-default btn111" id="btn_{{ obj.item.id }}" href="javascript:update_weight('{{ obj.item.id }}','{{ obj.item.weight }}','{{ obj.item.sku }}')">更新</a>
+            </td>
+            <td>{{ obj.purchaseorder.supplier }}</td>
+            <td>{{ obj.supplier_sku }}</td>
+            <td>
+                <p type="text" id="trackingNo_{{ obj.purchaseorder.id }}" class="trackingNo_{{ obj.purchaseorder.id }}" style="width:120px;">{{ obj.purchaseorder.tracking }}</p>
+                <a class="btn btn-default" href="javascript:update_poi_trackingNo({{ obj.purchaseorder.id }})">更新</a>
+            </td>
+            <td>{{ obj.note }}</td>
+            <td>{{ obj.purchaseorder.creater }}</td>
+            <td>{{ obj.purchaseorder.manager }}</td>
+            <td><a class="btn btn-default" href="/admin/supply/purchaseordercheckeditem/?purchaseorderitem__exact={{ obj.id }}" target="_blank">已对单明细</a>
+                <br><br>
+            <!--<a class="btn btn-default" href="/admin/depot/depotinlog/?content_type__exact=50&object_id=0">已入库明细</a></td>-->
+            <td>{{ obj.purchaseorder.updated|date:"Y-m-d" }}</td>
+            <td><a class="btn btn-default" href="/admin/supply/purchaseorderqualitytesting/?purchaseorderitem__exact={{ obj.id }}" target="_blank">已记录的残次</a>
+                <br><br>
+                <a class="btn btn-default" href="/admin/supply/purchaseorder/{{ obj.purchaseorder.id }}">登记残次</a>
+                <br><br>
+                <!--<a class="btn btn-default" href="http://192.168.11.40:8003/tongguan/print_barcode/?depotitem_id={{ obj.depotitem_id }}&qty=1">不带水洗标打印条码</a>-->
+                <a class="btn btn-default" href="{% url 'print_barcode' %}?depotitem_id={{ obj.depotitem_id }}&qty={{ obj.real_qty }}&wash_mark=0" target="_blank">不带水洗标打印条码</a>
+                <br><br>
+                <a class="btn btn-default" href="{% url 'print_barcode' %}?depotitem_id={{ obj.depotitem_id }}&qty={{ obj.real_qty }}&wash_mark=1" target="_blank">带水洗标打印条码</a>
+            </td>
+
+            <!--<td>-->
+                <!--{% if obj.checked %}-->
+                <!--<button type="button" class="btn btn-default" onclick="javascript:window.open('/purchaseorder/printBarcode/{{ obj.id }}')" >html条码</button>-->
+                <!--{% endif %}-->
+            <!--</td>-->
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <!--<button type="button" class="btn btn-primary" id="package_click">确认对单</button>-->
+
+</form>
+<br>
+
+{% digg_paginator info %}
+
+
+<script type="text/javascript">
+
+    //初始化模态框内容
+    $(".item_report_equal").click(function(){
+        var itemId = $(this).attr("id");
+        $("#ajax_itemId").val(itemId);
+        $("#ajax_time").val("");
+        $("#ajax_note").val("");
+    });
+
+
+    $(document).ready(function(){
+
+        $("#tracking").focus();
+        $("#checkall").click(function(){
+            if($("#checkall").attr('checked')){
+                $("input[name='purchase_item_id']").attr("checked",true);
+            }else{
+                $("input[name='purchase_item_id']").attr("checked",false);
+            }
+        })
+
+        $('.date').datepicker({
+            'dateFormat': 'yy-mm-dd'
+        });
+
+        $("#package_click").click(function(){
+            var array= new Array();
+            $("input[name='purchase_item_id']").each(function(){
+
+                if($(this).attr("checked")){
+                    str = $(this).val()+'#'+$("#current_real_qty_"+$(this).val()).val()
+                    array.push(str)
+                    console.log(str)
+
+                }
+             });
+           if(array.length==0){
+                alert("请选择采购条目后再提交确认对单")
+           }else{
+                console.log(array.join(','))
+                array_str = array.join(',')
+                $.post(
+                    '/supply/supplier/ajax_update_checkorder_num',
+                    {"pois":array_str},
+                    function (data) {
+                        if(!data["status"]){
+                            alert(data["msg"]);
+                        }else{
+                            location.href=data['path'];
+                        }
+                    },
+                    'json'
+                    )
+                }
+         });
+    });
+
+
+    $("#export_csv").click(function(){
+        $("#type").val("export_csv")
+        $("#uform").submit()
+    });
+
+
+    $("button[name='checkorder_receive']").each(function(){
+        $(this).click(function(){
+            var weight = $(this).parent().parent().find($('.weight')).val()
+            if( weight == undefined || weight == 0 ){
+                alert('产品重量为0, 请更新产品的重量');
+            }else{
+                //$("#type").val("checkorder_receive")
+                //$("#checkorder_receive").val($(this).val())
+                //$("#uform").submit()
+                console.log($(this).val())
+            }
+        })
+    });
+
+    // 更新poi运单号
+    function update_poi_trackingNo(poiId){
+
+        var rea = window.prompt("物流号(多个物流用，请用英文字符,分隔)：");
+        if( rea != null )
+        {
+            $.post(
+                '/supply/supplier/ajax_update_poi_trackingNo',
+                {"poiId":poiId, "trackingNo":rea},
+                function (data) {
+                    if(data["status"]){
+                        $('.trackingNo_'+poiId).html(rea);
+                    }else{
+                        alert(data["message"]);
+                    }
+                },
+                'json'
+            )
+        }
+    };
+
+    // 更新重量
+    function update_weight(id,old_weight,model){
+        console.log(id,old_weight,model)
+        var rea = window.prompt(model+"产品重量：");
+        var weight = $('#weight_'+id).val()
+        console.log(rea,weight)
+        if(typeof(rea) == "undefined" || rea=='' || isNaN(rea)){
+                alert("请填写数字重量")
+                return false
+        }else{
+            $.post(
+                '/supply/supplier/ajax_item_weight',
+                {id:id,weight:rea,model:model,},
+                function (data) {
+                    if (data){
+                        // alert("修改成功!")
+                        $('#weight_'+id).val(rea)
+                        $('#btn_'+id).attr('onclick',"javascript:update_weight('"+id+"','"+rea+"','"+model+"')")
+                    }else{
+                        // alert("修改失败!")
+                        //$('#weight_'+id).val(old_weight)
+                        alert("修改产品重量失败")
+                    }
+                },
+                'json'
+            )
+        }
+    }
+</script>
+
+{% endblock %}

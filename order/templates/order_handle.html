@@ -1,0 +1,85 @@
+{% extends "base_header.html" %}
+{% block content %}
+{% include "cxcalendar.html" %}
+
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+    <div style="font-size:20px;font-weight:bold;color:#0000CC;">订单相关导出</div>
+    <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'order_handle' %}">
+        {% csrf_token %} 
+        <label class="control-label" for="fileInput" style="width:241px" >订单产品明细表:</label>
+        <input type="hidden" name="type" value="orderitem_detail">
+        <label class="control-label" for="fileInput">Form:</label>
+        <input type="text" class="date" name="from">
+        <label class="control-label" for="fileInput">To:</label>
+        <input type="text" class="date" name="to">
+        <label class="control-label" for="fileInput">SHOP:</label>
+        <select name="shop" style="height:34px;width:90px;">
+            <option value=''>all</option>
+            {% for shop_id, shop_name in shops %}
+            <option value="{{ shop_id }}">{{ shop_name }}</option>
+            {% endfor %}
+        </select>
+        <label class="control-label" for="fileInput">账号:</label>
+        <select name="channel" style="height:34px;width:90px;">
+            <option value=''>all</option>
+            {% for channel in channels %}
+            <option value="{{ channel.id }}">{{ channel.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-small btn-primary">Submit</button>
+    </form>
+
+    <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'order_handle' %}">
+        {% csrf_token %} 
+        <label class="control-label" for="fileInput" style="width:241px" >订单成本表(订单创建时间created):</label>
+        <input type="hidden" name="type" value="order_cost">
+        <label class="control-label" for="fileInput">Form:</label>
+        <input type="text" class="date" name="from">
+        <label class="control-label" for="fileInput">To:</label>
+        <input type="text" class="date" name="to">
+        <label class="control-label" for="fileInput">SHOP:</label>
+        <select name="shop" style="height:34px;width:90px;">
+            <option value=''>all</option>
+            {% for shop_id, shop_name in shops %}
+            <option value="{{ shop_id }}">{{ shop_name }}</option>
+            {% endfor %}
+        </select>
+        <label class="control-label" for="fileInput">账号:</label>
+        <select name="channel" style="height:34px;width:90px;">
+            <option value=''>all</option>
+            {% for channel in channels %}
+            <option value="{{ channel.id }}">{{ channel.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-small btn-primary">Submit</button>
+    </form>
+</fieldset>
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+<div>
+    <div style="font-size:20px;font-weight:bold;color:#0000CC;">多渠道订单导入</div>
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'order_handle' %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="manual_import_order">
+            <label class="control-label" for="fileInput" style="width:180px">根据ws的sku获取图片: </label>
+            <div class="form-group">
+                <input type="file" class="input-file" name="csvFile">
+            </div>
+            <label class="control-label" for="fileInput">账号:</label>
+            <select name="channel" style="height:34px;width:90px;" required="required">
+                <option value=''></option>
+                {% for channel in channels %}
+                <option value="{{ channel.id }}">{{ channel.name }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn btn-small btn-primary btn111">Submit</button>
+            <label>格式下载</label>
+            <a href="/static/downloadfiles/import_multi_aliexpress.csv">aliexpress</a>&nbsp;&nbsp;
+        </form>
+</div>
+</fieldset>
+
+<script type="text/javascript">
+    $('.date').cxCalendar();    
+</script>
+{% endblock %}

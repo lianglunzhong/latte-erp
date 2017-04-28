@@ -1,0 +1,195 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body style="margin:5px;">
+{% if datas %}
+        {% for data in datas %}
+<table>
+<tbody>
+<tr>
+<td style="margin-bottom:10px;">
+<table style="cursor: default; border: 1px solid   #fff;font-size: 12px;font-family:  Arial, Verdana, Helvetica, sans-serif; letter-spacing: normal; orphans: auto; text-indent: 0px; text-transform: none; widows: auto; word-spacing: 0px; -webkit-text-stroke  -width: 0px; background-color: #ffffff;  color:   #000000;" border="0" cellspacing="0" cellpadding="0" width="400" align="left" bgcolor="#FFFFFF">
+    <tbody>
+    <tr>
+    <td style="text-align:center;">
+    <table border="0" cellspacing="0" cellpadding="0" width="99%" align="center" bgcolor="#FFFFFF">
+        <tbody>
+        <tr>
+        <td style="color: #000000;  cursor: text; " height="35" align="center" valign="middle">
+        <table style="cursor: default; border: 0px dashed #bbbbbb; text-align: center;font-size:10px;height:35px;margin-top:5px;" border="0" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+        <tr>
+        <td style="cursor: text;border: 1px solid #000;font-size:12px;padding-left: 5px;;" width="60%" align="left" valign="middle">From:Chen Yiwei<br>Forward SF-EXPRESS <br>P.O.Box 7023,14002 Tallinn,<br>Estonia</td>
+        <td style="cursor: text;border: none;" width="1%" align="left" valign="middle"></td>
+        <td style="cursor: text;border: 1px solid #000;" width="39%" align="right"> <p style="text-align: center;font-weight: bold;font-size: 16px;">POSTIMAKS TASUTUD TAXE PERÇUE ESTONIE No.199</p></td>
+        </tr>
+        </tbody>
+        </table>
+        </td>
+        </tr>
+        <tr>
+        <td style="color: #000000; cursor: text;padding-top:5px;" align="center" valign="middle" bgcolor="#fff">
+        <table style="cursor: default; text-align: center;" border="0" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+        <tr> 
+        <td style=" cursor: text; border: 1px solid #000;font-weight: bold;font-size:20px;" width="35%" height="85" align="center" valign="middle">PRIORITY</td>
+        <td style=" cursor: text; border: none;" width="1%" align="center" valign="middle"></td> 
+        <td style=" cursor: text; border: 1px solid #000;border-bottom:none;font-size:12px;padding-left: 2px;" width="64%" align="left" valign="top">To:{{ data.ship_name }}<br>{{ data.ship_address }}</td>
+        </tr>
+        <tr> 
+        <td style=" cursor: text; border: none;" width="35%" align="center" valign="middle"></td> 
+        <td style=" cursor: text; border: none;" width="1%" align="center" valign="middle"></td> 
+        <td style=" cursor: text; border: 1px solid #000;border-top:none;font-size:12px;padding-left:2px;" width="64%" align="left" valign="top">ZIP:{{ data.zip }}<br>{{ data.phone }}<br>{{ data.ship_country }} </td>
+        </tr>
+        </tbody>
+        </table>
+        </td>
+        </tr>
+        <tr>
+        <td style="color: #000000; cursor: text;padding-top:5px;" height="80" align="center" valign="middle" bgcolor="#fff">
+        <table style="cursor: default; text-align: center;" border="0" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+        <tr>  
+        <td style=" cursor: text; border: none;font-weight: bold;font-size:28px;" width="10%" align="right" valign="top">R</td> 
+        <td style=" cursor: text; border: none" width="90%" align="left" valign="top"><img src="{{ barcode128 }}{{ data.tracking_no }}" width="280" height="70" /><p style="text-align:left;padding-left:75px;margin:0;font-size:16px;">{{ data.tracking_no }}</p></td>
+        </tr>
+        </tbody>
+        </table>
+        </td>
+        </tr>
+        <tr>
+        <td style="color: #000000; cursor: text;" height="80" align="center" valign="middle" bgcolor="#fff">
+        <table style="cursor: default; text-align: center;" border="0" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+        <tr>  
+        <td style=" cursor: text; border: none;padding-left:40px;" width="60%" align="center" valign="top"><img src="{{ barcode128 }}{{ data.sf_numbers }}" width="210" height="50" /><p style="margin:0;font-size:16px;">{{ data.sf_numbers }}</p></td>
+        <td style=" cursor: text; border: none;font-weight: bold;font-size:24px;" width="40%" align="center" valign="middle">{{ data.pick_code }}</td> 
+        </tr>
+        </tbody>
+        </table>
+        </td>
+        </tr>
+        </tbody>
+    </table>
+    </td>
+    </tr>
+    </tbody>
+
+</table>
+</td>
+</tr>
+
+
+<tr>
+<td>
+
+<table style="cursor: default; border: 1px solid #000;font-size: 12px;font-family:  Arial,Verdana,Helvetica, sans-serif; letter-spacing: normal; orphans: auto; text-indent: 0px; text-transform: none; widows: auto; word-spacing: 0px; -webkit-text-stroke  -width: 0px; background-color: #ffffff;  color:   #000000;" border="0" cellspacing="0" cellpadding="0" width="400" align="left" bgcolor="#FFFFFF">
+    <tbody>
+    <tr height="35">
+    <td style="cursor: text; border-bottom: 1px solid black;"><table style="cursor: default; font-size: 10px; text-align: left;border-collapse:collapse;" border="0" cellspacing="0" cellpadding="0" width="100%"><tbody><tr>
+    <td style="cursor: text; border: none;font-size: 14px;font-weight: bold;" width="50%" align="left" valign="top" >CUSTOMS<br/>DECLARATION</td>
+    <td style="cursor: text;border:none;font-size: 10px;" width="30%" align="left">May be opened<br/>officially</td>
+    <td style="cursor: text;font-size:24px;" width="20%" align="right">CN22</td>
+    </tr></tbody></table></td>
+    </tr>
+    <tr>
+    <td style="cursor: text; border-bottom: 1px solid black;"><table style="cursor: default; font-size: 12px; text-align: left;border-collapse:collapse;" border="0" cellspacing="0" cellpadding="0" width="100%"><tbody><tr>
+    <td style="cursor: text;" width="50%" align="left">Designated operator</td>
+    <td style="cursor: text;font-size: 10px;" width="50%" align="left" valign="top" >
+        <table style="cursor: default; font-size: 10px; text-align: left;border-collapse:collapse;" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+        <tr><td style="font-size:10px;"><strong>important!</strong></td></tr>
+        <tr><td>See instructions on the back</td></tr>
+        </tbody>
+        </table>
+    </td>
+   
+    </tr></tbody></table></td>
+    </tr>
+     <tr>
+    <td style="cursor: text; border-bottom: 1px solid black;">
+        <table style="cursor: default; font-size: 12px; text-align: left;border-collapse:collapse;" border="0" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+        <tr style="border-bottom: 1px solid black;">
+            <td style="cursor: text; border-right: 1px solid black;" width="8%" align="center"></td>
+            <td style="cursor: text; border-right: 1px solid black;" width="32%" align="left">Gift</td>
+            <td style="cursor: text; border-right: 1px solid black;" width="8%" align="center"></td>
+            <td style="cursor: text;" width="52%" align="left">Commercial Sample</td>    
+        </tr>
+        <tr>
+            <td style="cursor: text; border-right: 1px solid black;" width="8%" align="center"></td>
+            <td style="cursor: text; border-right: 1px solid black;" width="32%" align="left">Documents</td>
+            <td style="cursor: text; border-right: 1px solid black;" width="8%" align="center">X</td>
+            <td style="cursor: text;" width="52%" align="left"> Other <span style="padding-left:35px;font-size:11px;"><i>Tick one or more boxes</i></span></td>    
+        </tr>
+        </tbody>
+        </table>
+    </td>
+    </tr>
+    <tr>
+    <td style="cursor: text; border-bottom: 1px solid black;">
+        <table style="cursor: default; font-size: 11px; text-align: left;border-collapse:collapse;" border="0" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+        <tr style="border-bottom: 1px solid black;">
+            <td style="cursor: text; border-right: 1px solid black;" width="55%" align="left">Quantity and detailed <br/>description of contents</td>
+            <td style="cursor: text; border-right: 1px solid black;" width="25%" align="left">Weight<br/><i>(in kg)</i></td>
+            <td style="cursor: text;" width="20%" align="left">Value</td>    
+        </tr>
+        <tr height="70" style="border-bottom: 1px solid black;">
+            <td style="cursor: text; border-right: 1px solid black;" width="55%" valign="top" align="left">{{ data.set_name }} ×{{ data.qty }}</td>
+            <td style="cursor: text; border-right: 1px solid black;" width="25%" valign="top" align="right">{{ data.product_weight }}</td>
+            <td style="cursor: text;" width="20%" valign="top" align="right">{{ data.product_amount }}</td>      
+        </tr>
+      
+        <tr height="45" >
+            <td style="cursor: text; border-bottom:1px solid #000;border-right: 1px solid black;" width="55%" align="left">For commerical items only If<br/>known,HS tariff number and<br/>country of origin of goods</td>
+            <td style="cursor: text; border-right: 1px solid black;" width="25%" align="left">Total<br/>Weight<br/><i>(in kg)</i></td>
+            <td style="cursor: text;" width="20%" align="left">Total<br/>Value<br/>(USD)</td>
+        </tr>
+         <tr>
+            <td style="cursor: text; border-right: 1px solid black;font-size:14px;" width="55%" align="left">CN</td>
+            <td style="cursor: text; border-right: 1px solid black;" width="25%" align="right">{{ data.actual_weight }}</td>
+            <td style="cursor: text;" width="20%" align="right">{{ data.customs_amount }}</td>
+        </tr>
+        </tbody>
+        </table>
+    </td>
+    </tr>
+    <tr>
+    <td style="color: #000000;  cursor: text;font-size:11px;" height="70" align="left" valign="top" bgcolor="#fff" >
+    I, the undersigned, whose name and address are given on
+the item, certify that the particulars given in this
+declaration are correct and that this item does not
+contain any dangerous article or articles prohibited
+by legislation or by postal or customs regulations
+    <br/>
+    <span style="font-size:12px;">Date and sender's signature:    Mr.Chen</span>
+    
+    </td>
+    </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td height="5"></td>
+</tr>
+<tr>
+<td style="border-top: 3px solid #000;">
+<table style="cursor: default; border:none;font-size: 12px;font-family:  Arial,Verdana,Helvetica, sans-serif; letter-spacing: normal; orphans: auto; text-indent: 0px; text-transform: none; widows: auto; word-spacing: 0px; -webkit-text-stroke  -width: 0px; background-color: #ffffff;  color:   #000000;" border="0" cellspacing="3" cellpadding="0" width="400" align="left" bgcolor="#FFFFFF">
+    <tbody>
+    <tr height="35">
+    <td style=" cursor: text; border: none;" width="50%" align="center" valign="top"><img src="{{ barcode128 }}{{ data.sf_numbers }}" width="180" height="30" /><p style="margin:0;font-size:16px;">{{ data.sf_numbers }}</p></td>
+    <td style=" cursor: text; border: none;font-weight: bold;font-size:24px;" width="25%" valign="bottoms" align="center" valign="middle">{{ data.ship_country }} G</td>
+    <td style=" cursor: text; border: 1px solid #000;padding:5px;font-weight: bold;font-size:14px;" width="25%" align="center" valign="middle">Electric<br><span style="font-size:20px;">N</span></td> 
+    </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+        {% endfor %}
+    {% endif %}
+</body>

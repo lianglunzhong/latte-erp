@@ -1,0 +1,462 @@
+{% extends "base_header.html" %}
+{% block content %}
+{% include "cxcalendar.html" %}
+<style>
+    textarea{
+        height: 200;
+        width: 180;
+    }
+</style>
+
+
+<a href="/admin/tongguan/product3bao/" target="_blank">三宝产品</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="/admin/tongguan/package3bao/" target="_blank">三宝Package</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="/admin/shipping/nxbcode/" target="_blank">中邮运单号列表</a>
+<hr>
+
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+<div style="font-size:20px;font-weight:bold;color:#0000CC;">三宝产品操作</div>
+<div>
+    <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_product_3bao' %}">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="upload">
+        <label class="control-label" for="fileInput" style="width:180px">批量上传三宝产品:</label>
+        <div class="form-group">
+            <input type="file" class="input-file" name="csvFile">
+        </div>
+        <button type="submit" class="btn btn-small btn-primary btn111">Submit</button>
+        <a href="/static/downloadfiles/upload_item3bao.csv">格式下载</a> 
+        ( 可直接上传ws的3bao产品数据 )
+    </form>
+</div>
+</fieldset>
+
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+<div>
+<div style="font-size:20px;font-weight:bold;color:#0000CC;">三宝Package操作</div>
+    <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_package_3bao' %}">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="upload_3bao_tonanjing">
+        <label class="control-label" for="fileInput" style="width:320px">批量csv更新"发往南京"状态(1为已发往,可设置0或1):</label>
+        <div class="form-group">
+            <input type="file" class="input-file" name="csvFile">
+        </div>
+        <button type="submit" class="btn btn-small btn-primary btn111">Submit</button>
+        <a href="/static/downloadfiles/upload_3bao_tonanjing.csv">格式下载</a> 
+        ( CSV字段名称: package_id,is_tonanjing )
+    </form>
+    <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_package_3bao' %}">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="upload_3bao_over">
+        <label class="control-label" for="fileInput" style="width:320px">批量csv更新"海关审结"状态(1为已审结,可设置0或1):</label>
+        <div class="form-group">
+            <input type="file" class="input-file" name="csvFile">
+        </div>
+        <button type="submit" class="btn btn-small btn-primary btn111">Submit</button>
+        <a href="/static/downloadfiles/upload_3bao_over.csv">格式下载</a> 
+        ( CSV字段名称: package_id,is_over )
+    </form>
+    <br>
+    <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_package_3bao' %}">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="export_package3bao">
+        <label class="control-label" for="fileInput">按print_time导出三宝Package: </label>
+        <br>
+        <label for="exportdata-from">From: </label>
+        <input type="text" name="from" id="exportdata-from1" class="date1" />
+        <label for="exportdata-to">To: </label>
+        <input type="text" name="to" id="exportdata-to1" class="date1" />
+        <button type="submit" class="btn btn-small btn-primary btn111">Submit</button>
+    </form>
+</div>
+</fieldset>
+
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_k_tongguan' %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="tongguan_k_tongguan">
+            <input type="hidden" name="carrier" value="NXB">
+            <label class="control-label" for="fileInput" style="width:180px">K通关订单导出<span style="color:red;">(中邮)</span>:</label>
+            <br>
+            <label>输入Package_id:</label>
+            <br>
+            <textarea name="package_ids"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_k_tongguan' %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="tongguan_k_tongguan">
+            <input type="hidden" name="carrier" value="EUB">
+            <label class="control-label" for="fileInput" style="width:180px">K通关订单导出<span style="color:red;">(EUB)</span>:</label>
+            <br>
+            <label>输入Package_id:</label>
+            <br>
+            <textarea name="package_ids"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_k_tongguan' %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="tongguan_k_tongguan">
+            <input type="hidden" name="carrier" value="FEDEX">
+            <label class="control-label" for="fileInput" style="width:180px">K通关订单导出<span style="color:red;">(FedEx)</span>:</label>
+            <br>
+            <label>输入Package_id:</label>
+            <br>
+            <textarea name="package_ids"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_k_tongguan' %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="tongguan_export_product">
+            <label class="control-label" for="fileInput" style="width:180px">K通关产品导出:</label>
+            <br>
+            <label>输入sku:</label>
+            <br>
+            <textarea name="skus"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <div>
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_k_tongguan' %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="export_not_record_skus">
+            <button type="submit" class="btn btn-small btn-primary btn111">导出未备案商品sku</button>
+        </form>
+        <br>
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_k_tongguan' %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="export_3bao_not_complete">
+            <button type="submit" class="btn btn-small btn-primary" data-toggle="tooltip" data-placement="bottom" title="Item在架但Item3bao（不存在|hscode空|model不全）">
+                导出Item3bao不全的产品
+            </button>
+        </form>
+        <br>
+    </div>
+</fieldset>
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="" target="_blank">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="order_ship_pdf_z">
+            <label class="control-label" for="fileInput" style="width:180px">物流生成打印报单<span style="color:red;">(中邮)</span>:</label>
+            <br>
+            <label>输入Package_id<span style="color:red;">(!!!不能重复!!!)</span>: </label>
+            <br>
+            <textarea name="package_ids"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_bulk_action' %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="import_nxb_tracking_no">
+            <label class="control-label" for="fileInput" style="width:180px">批量导入中邮运单号:</label>
+            <br>
+            <label>输入运单号:</label>
+            <br>
+            <textarea name="tracking_nos"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>&nbsp;&nbsp;( 可用 {{ tracking_no_nums }} 个 )
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="export_package_product">
+            <label class="control-label" for="fileInput" style="width:180px">批量导出Package产品数据:</label>
+            <br>
+            <label>输入Package_id:</label>
+            <br>
+            <textarea name="package_id"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="" target="_blank">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="show_model_image">
+            <label class="control-label" for="fileInput" style="width:180px">批量展示产品图片:</label>
+            <br>
+            <label>输入3bao的sku:</label>
+            <br>
+            <textarea name="models"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+</fieldset>
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+<div>
+    <div style="font-size:20px;font-weight:bold;color:#0000CC;">收寄</div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_shouji' %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="nxb_pickup_export">
+            <label class="control-label" for="fileInput" style="width:180px">邮政小包收寄导出: </label>
+            <br>
+            <label>输入Package_id: </label>
+            <br>
+            <textarea name="package_id"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_shouji' %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="eub_pickup_export">
+            <label class="control-label" for="fileInput" style="width:180px">E邮宝收寄导出:</label>
+            <br>
+            <label>输入Package_id:</label>
+            <br>
+            <textarea name="package_id"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_shouji' %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="eub_weight_pickup_export">
+            <label class="control-label" for="fileInput" style="width:180px">E邮宝重量导出:</label>
+            <br>
+            <label>输入Package_id:</label>
+            <br>
+            <textarea name="package_id" cols="25"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <label class="control-label" style="width:180px">NXB     =>  邮政小包</label>
+        <label class="control-label" style="width:180px">EUB     =>  E邮宝</label>
+        <label class="control-label" style="width:180px">pick up =>  收寄</label>
+    </div>
+</fieldset>
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+<div>
+    <div style="font-size:20px;font-weight:bold;color:#0000CC;">Package上传格式导出</div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'tongguan_export_upload_format' %}" id="eub_format">
+            {% csrf_token %}
+            <input type="hidden" name="type" id="eub_format_type" value="eub_format_export">
+            <label class="control-label" for="fileInput" style="width:180px">E邮宝格式导出:</label>
+            <br>
+            <label>输入Package_id ( 去重复 ):</label>
+            <br>
+            <textarea name="package_id"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default" id='package_info'>订单信息</button>
+            <button type="button" class="btn btn-default" id='sku_list'>SKU列表</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="" target="_blank">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="chukouyi_export">
+            <label class="control-label" for="fileInput" style="width:180px">出口易订单上传格式: </label>
+            <br>
+            <label>输入Package_id ( 去重复 ): </label>
+            <br>
+            <textarea name="package_id"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="hulianyi">
+            <label class="control-label" for="fileInput" style="width:180px">互联易订单上传格式:</label>
+            <br>
+            <label>输入Package_id ( 去重复 ):</label>
+            <br>
+            <textarea name="package_id"></textarea>
+            <br>
+            <select name="shipping" style="height:34px;width:101px;">
+                <option value='1'>香港小包挂号</option>
+                <option value='2'>俄罗斯小包挂号</option>
+                <option value='3'>DHL小包挂号</option>
+                <option value='4'>新小包挂号</option>
+            </select>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+    <br />
+</fieldset>
+
+<!-- SDHLWS,SFWS,东航begin -->
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+<div>
+    <div style="font-size:20px;font-weight:bold;color:#0000CC;">SDHLWS,SFWS,东航上传PackageId导出</div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="" id="sdhlws_eub_format">
+            {% csrf_token %}
+            <input type="hidden" name="type" id="sdhlwstype" value="sdhlws_shenbao_export">
+            <label class="control-label" for="fileInput" style="width:180px">SDHLWS导出:</label>
+            <br>
+            <label>输入Package_id ( 去重复 ):</label>
+            <br>
+            <textarea name="package_id"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default" id='sdhlws_button'>英文导出</button>
+            <button type="button" class="btn btn-default" id='cn_sdhlws_button'>中文导出</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="" id="sfws_eub_format">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="sfws_shenbao_export" id="sfwstype">
+            <label class="control-label" for="fileInput" style="width:180px">SFWS导出: </label>
+            <br>
+            <label>输入Package_id ( 去重复 ): </label>
+            <br>
+            <textarea name="package_id"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default" id='sfws_button'>英文导出</button>
+            <button type="button" class="btn btn-default" id='cn_sfws_button'>中文导出</button>
+        </form>
+    </div>
+    <div style="width:250px;float:left;">
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="" id="donghang_eub_format">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="donghang_shenbao_export" id="donghangtype">
+            <label class="control-label" for="fileInput" style="width:180px">东航导出:</label>
+            <br>
+            <label>输入Package_id ( 去重复 ):</label>
+            <br>
+            <textarea name="package_id"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default" id='donghang_button'>英文导出</button>
+            <button type="button" class="btn btn-default" id='cn_donghang_button'>中文导出</button>
+        </form>
+    </div>
+    <br />
+</fieldset>
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+<form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="" id="upload_category_csv">
+    {% csrf_token %}
+    <input type="hidden" name="type" value="upload_category_csv" id="categorytype">
+    <label class="control-label" for="fileInput" style="width:100px;">category导出:</label>
+    <button type="button" class="btn btn-small btn-primary btn111" id='category_export_button'>Submit</button>
+    <label class="control-label" for="fileInput" style="width:320px;margin-left:100px">批量修改category,记事本打开下载category另存为utf8:</label>
+    <div class="form-group">
+        <input type="file" class="input-file" name="csvFile">
+    </div>
+    <button type="submit" class="btn btn-small btn-primary btn111" id="upload_category">Submit</button>
+
+</form>
+</fieldset>
+<!-- SDHLWS,SFWS,东航end -->
+
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+    <div>
+    <div style="font-size:20px;font-weight:bold;color:#0000CC;">运单号操作</div>
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="export_order_track">
+            <label class="control-label" for="fileInput">按时间导出打印的trackcode和package_id ( 请选择上开始和结束时间 ) : </label>
+            <br>
+            <label for="exportdata-from">From: </label>
+            <input type="text" name="from" id="exportdata-from2" class="date2" />
+            <label for="exportdata-to">To: </label>
+            <input type="text" name="to" id="exportdata-to2" class="date2" />
+            <button type="submit" class="btn btn-small btn-primary btn111">Submit</button>
+        </form>
+        <br>
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="" style="display:none;">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="release_trackcode">
+            <label class="control-label" for="fileInput">批量释放运单号: </label>
+            <br>
+            <div class="form-group">
+                <input type="file" class="input-file" name="csvFile">
+            </div>
+            <button type="submit" class="btn btn-small btn-primary btn111">Submit</button>
+            <a href="/static/downloadfiles/release_trackcode.csv">格式下载</a> 
+            ( CSV字段名称: trackcode,package_id )
+        </form>
+    </div>
+</fieldset>
+<br /><br /><br /><br />
+<fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;display:none;">
+    <div>
+        <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="package_export">
+            <label class="control-label" for="fileInput" style="width:180px">打印发货单:</label>
+            <br>
+            <label>输入package id:</label>
+            <br>
+            <textarea name="packageids"></textarea>
+            <br>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+</fieldset>
+<script type="text/javascript">
+    $('#exportdata-from1').cxCalendar();
+    $('#exportdata-to1').cxCalendar();
+
+    $(function () { $("[data-toggle='tooltip']").tooltip(); });
+
+    $("#sku_list").click(function(){
+        $("#eub_format_type").val("sku_list")
+        $("#eub_format").submit()
+    })
+
+    $("#cn_sdhlws_button").click(function(){
+        $("#sdhlwstype").val("cn_sdhlws_shenbao_export");
+        $("#sdhlws_eub_format").submit()
+    })
+
+    $("#sdhlws_button").click(function(){
+        $("#sdhlwstype").val("sdhlws_shenbao_export");
+    })
+
+
+    $("#cn_sfws_button").click(function(){
+        $("#sfwstype").val("cn_sfws_shenbao_export");
+        $("#sfws_eub_format").submit()
+    })
+
+    $("#sfws_button").click(function(){
+        $("#sfwstype").val("sfws_shenbao_export");
+    })
+
+    $("#cn_donghang_button").click(function(){
+        $("#donghangtype").val("cn_donghang_shenbao_export");
+        $("#donghang_eub_format").submit()
+    })
+
+    $("#donghang_button").click(function(){
+        $("#donghangtype").val("donghang_shenbao_export");
+    })
+
+
+    // export category
+    $("#upload_category").click(function(){
+        $("#categorytype").val("upload_category_csv");
+    })
+
+    $("#category_export_button").click(function(){
+        $("#categorytype").val("category_export");
+        $("#upload_category_csv").submit()
+    })
+</script>
+{% endblock %}

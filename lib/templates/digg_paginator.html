@@ -1,0 +1,38 @@
+<div class="bs-component col-lg-7">
+    <ul class="pagination" style="margin:0px;">
+    {% if has_previous %}
+    <li class="prev"><a href="?p={{ previous }}{% if queries %}&amp;{{ queries.urlencode }}{% endif %}" title="Previous Page">&laquo;</a></li>
+    {% else %}
+    <li class="prev-na"><a href="#" rel="nofollow">&laquo;</a></li>
+    {% endif %}
+
+    {% if not in_leading_range %}
+    {% for num in pages_outside_trailing_range %}
+    <li class="page"><a href="?p={{ num }}{% if queries %}&amp;{{queries.urlencode}}{% endif %}" >{{ num }}</a></li>
+    {% endfor %}
+
+    <li><span>...</span></li>
+
+    {% endif %}
+    {% for num in page_numbers %}
+    {% ifequal num page %}
+    <li class="active" title="Current Page"><a href="#" rel="nofollow">{{ num }}</a></li>
+    {% else %}
+    <li class="page"><a href="?p={{ num }}{% if queries %}&amp;{{queries.urlencode}}{% endif %}" title="Page {{ num }}">{{ num }}</a></li>
+    {% endifequal %}
+    {% endfor %}
+    {% if not in_trailing_range %}
+
+    <li><a href="#" rel="nofollow">...</a></li>
+
+    {% for num in pages_outside_leading_range reversed %}
+    <li class="page"><a href="?p={{ num }}{% if queries %}&amp;{{queries.urlencode}}{% endif %}" >{{ num }}</a></li>
+    {% endfor %}
+    {% endif %}
+    {% if has_next %}
+    <li class="next"><a href="?p={{ next }}{% if queries %}&amp;{{queries.urlencode}}{% endif %}" title="Next %Page">&raquo;</a></li>
+    {% else %}
+    <li class="next-na"><a href="#" rel="nofollow">&raquo;</a></li>
+    {% endif %}
+    </ul>
+</div>

@@ -1,0 +1,74 @@
+{% extends "base_header.html" %}
+{% block content %}
+<form class="form-inline" role="form" id="deliver_form" action="#" method="post">
+    {% csrf_token %}
+    <label style="width:200px;">员工号: </label>
+    <input type="text" class="form-control" name="middle_user" id="middle_user" value="" style="width:300px;">
+</form>
+<form class="form-inline" id="pick_num_form" method="post">
+    {% csrf_token %}
+    <input type="hidden" name='type' value='assign_assigner'>
+    <input type="hidden" id="pick_user" name='pick_user'>
+    <label style="width:200px;">扫描/录入拣货单单号记录拣货量: </label>
+    <input type="text" class="form-control" name="pick_num" id="pick_num" value="" style="width:300px;">
+    <input type="submit" class="btn btn-primary" value="submit">
+</form>
+
+<form class="form-inline" role="form" action="" method="post" id="export_form">
+    {% csrf_token %}
+<!--     <input type="hidden" name="type" id="export_type" value="create_purchase">
+    <input type="submit" class="btn btn-primary" value="批量生成采购单" id="create_submit1"> -->
+    <div id="table_div" style="overflow:scroll;width:60%;margin-top:20px;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="100">拣货日期</th>
+                    <th width="100">拣货人</th>
+                    <th width="120">拣货单号</th>
+                    <th width="50">类型</th>
+                    <th width="100">sku品种数</th>
+                    <th width="100">货品总数</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if objs %}
+                {% for p in objs %}
+                <tr>
+                    <td>{{ p.assign_time|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ p.assigner }}</td>
+                    <td>{{ p.pick_num }}</td>
+                    <td>{{ p.get_pick_type_display }}</td>
+                    <td>{{ p.sku_count }}</td>
+                    <td>{{ p.sku_sum }}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {% include "pagination.html" %}
+    
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        
+        $("input[type='text']").click(function(){
+            $(this).select();
+        })
+
+        $("#deliver_form").submit(function(){
+            $("#pick_user").val($("#middle_user").val())
+            $("#pick_num").focus();
+            $("#pick_num").select();
+            return false;
+        })
+        $('#middle_user').blur(function (){
+            $("#pick_user").val($("#middle_user").val())
+        })
+
+        $("#middle_user")[0].focus();
+
+    })
+</script>
+{% endblock %}

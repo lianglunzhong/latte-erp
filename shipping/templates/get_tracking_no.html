@@ -1,0 +1,25 @@
+{% extends "base_header.html" %}
+{% block content %}
+
+
+<form action="" method="post" target="_blank">
+{% csrf_token %}
+<div style="font-size:16px;">
+{% for carrier, shippings in shipping_list.iteritems %}
+    <div class="carrier_shipping" style="margin-bottom: 20px;">
+        <label style="width:100px;font-weight:normal;">{{ carrier|title }}: </label>
+        {% for data in shipping_counts %}
+            {% if data.shipping__label in shippings %}
+            <input type="checkbox" name="shipping_label" value="{{ data.shipping__label }}" id="shipping_{{ data.shipping__label }}">
+            <label for="shipping_{{ data.shipping__label }}" style="width:170px;">{{ data.shipping__label }}物流商下单({{ data.id__count }})</label>
+            {% endif %}
+        {% endfor %}
+    </div>
+    
+{% endfor %}
+</div>
+    <input class="btn btn-small btn-primary" type="submit" value="submit">
+</form>
+<br>
+
+{% endblock %}

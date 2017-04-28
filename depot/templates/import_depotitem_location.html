@@ -1,0 +1,30 @@
+{% extends "base_header.html" %}
+
+{% block content %}
+
+{% if success %}
+    <div class="alert alert-warning alert-dismissable">
+        <strong style="font-size:20px;">{{ msg }}</strong>
+    </div>
+{% endif %}
+<div class="alert alert-warning alert-dismissable">
+    <strong style="font-size:20px;">1、所有csv上传前用记事本打开另存为utf-8格式<br>
+        2、此系统里的货品sku / choies网站sku都可以上传匹配<br>
+    </strong>
+</div>
+
+<form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="#">
+    {% csrf_token %}
+    <div>
+        <input type="hidden" name="depot_id" value="2">
+        <label class="control-label" style="width:150px">南京仓库批量导入货品库位:</label>
+        <div class="form-group">
+            <input type="file" class="input-file" name="csvFile">
+        </div>
+        <button type="submit" class="btn btn-small btn-primary btn111">上传</button>
+        <a href="/static/downloadfiles/NJ_depotitem_location.csv">格式下载</a>
+        <span style="color:red;"> (注: 所有csv上传前用记事本打开另存为utf-8格式)</span>
+    </div>
+</form>
+<br>
+{% endblock %}

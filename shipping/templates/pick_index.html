@@ -1,0 +1,115 @@
+{% extends "base_header.html" %}
+{% block content %}
+{% include "cxcalendar.html" %}
+<style>
+*{list-style:none;}
+.flow{width:850px;margin-left:50px;}
+.flow li{text-align:center;list-style-type:none;}
+input{-webkit-appearance: button;background-image: none;cursor:pointer;}
+.btn-white{padding:8px 10px;background:#fff !important;border:1px solid #d0d0d0;border-radius:3px;}
+.down{margin:0 auto;margin:8px 0;}
+.mr8{margin-right:8px;}
+.ml{margin-left:170px;}
+.blue{background:#79aec8;color:#fff !important;}
+</style>
+
+<div class="flow">
+    <ul>
+        <li>
+            <a href="#" class="btn btn-primary blue" data-toggle="tooltip" data-placement="right" title="配货中状态的包裹数">包裹数(<span class="count" id="ready_from_shipping"></span>)</a>
+        </li>
+        <li><img width="11" height="27" src="/static/label_img/down.jpg" class="down"></li>
+        <li class="ml">
+            <a href="{% url 'assign_shipping' 'auto' %}" class="btn btn-primary blue" data-toggle="tooltip" data-placement="right" title="可分配物流的包裹数">自动分配物流(<span class="count" id="auto_assign_shipping"></span>)</a>
+            <img width="29" height="12" src="/static/label_img/right.jpg" class="down" style="margin:0 8px;">
+            <a href="{% url 'assign_shipping' 'manual' %}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="可手动分配物流的包裹数">手动分配物流(<span class="count" id="hand_assign_shipping"></span>)</a>
+        </li>
+        <li><img width="11" height="27" src="/static/label_img/down.jpg" class="down"></li>
+        <li class="ml">
+            <a href="{% url 'get_tracking_no' %}" class="btn btn-primary blue" style="margin-left:42px;" data-toggle="tooltip" data-placement="right" title="已分配物流, 有API, 没有运单号的包裹数">物流商下单(<span class="count" id="get_tracking_no"></span>)</a>
+            <img width="29" height="12" src="/static/label_img/right.jpg" class="down" style="margin:0 8px;">
+            <a href="{% url 'pick_manual_deliver' %}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="已分配物流, 但没有API, 也没有运单号的包裹数">无物流API单独发货(<span class="count" id="no_api_shipping"></span>)</a>
+        </li>
+        <li><img width="11" height="27" src="/static/label_img/down.jpg" class="down"></li>
+        <li>
+            <a href="{% url 'pick_create' %}" class="btn btn-primary blue" data-toggle="tooltip" data-placement="right" title="已分配物流, 且有运单号的包裹数. 生成拣货单后, package状态从配货中变成打包中">生成拣货单(<span class="count" id="create_pick"></span>)</a>
+        </li>
+        <li><img width="11" height="27" src="/static/label_img/down.jpg" class="down"></li>
+        <li>
+            <a href="{% url 'pick_list' 'no_print' %}" class="btn btn-primary blue" style="margin-left:160px;" data-toggle="tooltip" data-placement="right" title="进入拣货单列表, 默认展示还未打印的拣货单数">拣货单列表(<span class="count" id="pick_count"></span>)</a>
+            <img width="29" height="12" src="/static/label_img/right.jpg" class="down" style="margin:0 8px;">
+            <a href="{% url 'pick_assign_assigner' %}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="进入分配拣货人页面, 默认展示已打印但还未分配拣货人的拣货单数">拣货量记录(<span class="count" id="pick_no_assigner"></span>)</a>
+        </li>
+        <li><img width="11" height="27" src="/static/label_img/down.jpg" class="down"></li>
+        <li>
+            <a href="{% url 'pick_sort' %}" class="btn btn-primary blue">单品单件包装(<span class="count" id="dandan"></span>)</a>
+            <a href="{% url 'pick_sort' %}" class="btn btn-primary blue">单品多件包装(<span class="count" id="danduo"></span>)</a>
+            <a href="{% url 'pick_sort' %}" class="btn btn-primary blue">多品多件分拣(<span class="count" id="duoduo"></span>)</a>
+            <a href="{% url 'pick_packaging' %}" class="btn btn-primary blue">多品多件包装(<span class="count" id="packaging"></span>)</a>
+
+            <img width="29" height="12" src="/static/label_img/right.jpg" class="down" style="margin:0 10px;">
+            <a href="{% url 'pick_re_print' %}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="进入重新打印面单, 更换物流打印面单页面">手动操作包装</a>
+        </li>
+        <li><img width="11" height="27" src="/static/label_img/down.jpg" class="down"></li>
+        <li class="ml">
+            <a href="{% url 'pick_execute_deliver' 'not' %}" class="btn btn-primary blue" style="margin-left:20px;" data-toggle="tooltip" data-placement="right" title="拣货单的状态从包装完成变成发货完成, 包裹状态从打包中变成已发货">执行发货(<span class="count" id="set_shipping"></span>)</a>
+            <img width="29" height="12" src="/static/label_img/right.jpg" class="down" style="margin:0 10px;">
+            <a href="{% url 'pick_abnormal' %}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="还未处理的异常包裹数量">异常拣货包裹(<span class="count" id="abnormal_package"></span>)</a>
+        </li>
+    </ul>
+
+</div>
+
+<div style="margin:30px 100px;">
+    <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="">
+       {% csrf_token %}
+       <input type="hidden" name="type" value="deliver_package_export">
+       <label class="control-label">WMS 发货数据导出: </label>
+       <label>Ship Time From: </label>
+       <input type="text" name="from" id="from">
+       <label>To: </label>
+       <input type="text" name="to" id="to">
+       <button type="submit" class="btn btn-small btn-primary">Submit</button>
+    </form>
+</div>
+
+<script>
+$(function () { $("[data-toggle='tooltip']").tooltip(); });
+
+$(document).ready(function(){
+    $(".count").each(function(){
+        $(this).html('<img width="16" class="wait" src="/static/label_img/loading.gif" />');
+    })
+    $('#from').cxCalendar();
+    $('#to').cxCalendar();
+
+
+    $.ajax({
+        type: 'GET',
+        url: "{% url 'pick_index' %}",
+        dataType: "json",
+        data: {
+            "type": "count_data",
+        },
+        success: function(res){
+            $("#ready_from_shipping").html(res['ready_from_shipping']);
+            $("#auto_assign_shipping").html(res['assign_shipping']);
+            $("#hand_assign_shipping").html(res['assign_shipping']);
+            $("#get_tracking_no").html(res['get_tracking_no']);
+            $("#no_api_shipping").html(res['no_api_shipping']);
+            $("#create_pick").html(res['create_pick']);
+            $("#pick_count").html(res['pick_count']);
+            $("#pick_no_assigner").html(res['pick_no_assigner']);
+            $("#dandan").html(res['dandan']);
+            $("#danduo").html(res['danduo']);
+            $("#duoduo").html(res['duoduo']);
+            $("#packaging").html(res['packaging']);
+            $("#set_shipping").html(res['set_shipping']);
+            $("#abnormal_package").html(res['abnormal_package']);
+
+            $(".wait").css('display', 'none');
+        }
+    });
+})
+</script>
+{% endblock %}

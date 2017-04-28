@@ -1,0 +1,128 @@
+{% extends "base_header.html" %}
+{% block content %}
+
+<form action="" method="post">
+    <fieldset class="form33" style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;background:#F5F5F5;">
+        <div>该仓库目前共有可拣货包裹<strong id="package_total">{{ count }}</strong>个。
+        <div>请选择需要拣货的包裹，生成拣货单，系统将自动分组成多张。</div>
+    </fieldset>
+
+    <fieldset class="form33" style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;">
+        <label>销售渠道</label>&nbsp;&nbsp;&nbsp;
+        <input type="checkbox" name="channel_types_all" id="channel_types_all" checked="true"><label style="font-weight:300;">全部</label>&nbsp;&nbsp;
+        {% for code, channel_type in channel_types %}
+            <input type="checkbox" name="channel_type" class="channel_type" checked="true" value="{{ code }}">
+            <label style="font-weight:300;">{{ channel_type }}</label>&nbsp;&nbsp;
+        {% endfor %}
+        <br>
+        <label>包裹类型</label>&nbsp;&nbsp;&nbsp;
+        <input type="checkbox" name="pick_types_all" id="pick_types_all" checked="true"><label style="font-weight:300;">全部</label>&nbsp;&nbsp;
+        {% for key, pick_type in pick_types %}
+            {% if key != 0 %}
+            <input type="checkbox" name="pick_type" class="pick_type" checked="true" value="{{ key }}">
+            <label style="font-weight:300;">{{ pick_type }}</label>&nbsp;&nbsp;
+            {% endif %}
+        {% endfor %}
+        <br>
+        <label>物理仓库</label>&nbsp;&nbsp;&nbsp;
+        <input type="checkbox" name="depots_all" id="depots_all" checked="true"><label style="font-weight:300;">全部</label>&nbsp;&nbsp;
+        {% for key, depot in depots %}
+            {% if key != 0 %}
+            <input type="checkbox" name="depot" class="depot" checked="true" value="{{ key }}">
+            <label style="font-weight:300;">{{ depot }}</label>&nbsp;&nbsp;
+            {% endif %}
+        {% endfor %}
+    </fieldset>
+    <fieldset style="padding: 10px;margin: 10px 0;border: 1px solid #d2d2d2;width:200px;height:360px;float:left;">
+        <legend style="width:auto;border-width: none;border-style: none;margin-bottom: auto;font-size: 16px;">选择邮寄方式</legend>
+        <input type="checkbox" name="shippings_all" id="shippings_all" checked="true"><label>全部</label>
+        <br>
+        <div style="padding-left:20px;">
+        {% for shipping in shippings %}
+            <input type="checkbox" name="shipping" class="shipping" checked="true" value="{{ shipping }}">
+            <label style="font-weight:300;">{{ shipping }}</label>
+            <br>
+        {% endfor %}
+        </div>
+    </fieldset>
+
+    <fieldset style="padding: 10px;margin: 10px 20px;border: 1px solid #d2d2d2;width:600px;float:left;">
+        <legend style="width:auto;border-width: none;border-style: none;margin-bottom: auto;font-size: 16px;">您当前筛选的包裹总汇信息</legend>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td width="200">包裹数</td>
+                    <td id="package_count">{{ total_count.package }}</td>
+                </tr>
+                <tr style="background:#F5F5F5;">
+                    <td width="200">订单数</td>
+                    <td id="order_count">{{ total_count.order }}</td>
+                </tr>
+                <tr>
+                    <td width="200">SKU品种</td>
+                    <td id="sku_count">{{ total_count.sku }}</td>
+                </tr>
+                <tr style="background:#F5F5F5;">
+                    <td width="200">货品总数</td>
+                    <td id="sku_sum">{{ total_count.sku_sum }}</td>
+                </tr>
+        </tbody>
+        </table>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td width="200">单单/单多包含的sku种类数:</td>
+                    <td><strong>25</strong></td>
+                </tr>
+                <tr>
+                    <td width="200">多品多件拣货单最大包裹数:</td>
+                    <td><strong>20</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+
+    <fieldset class="form33" style="padding: 4px;margin: 10px 0;border: 1px solid #d2d2d2;background:#F5F5F5;">
+        <input type="hidden" name="pick_create" value="pick_create">
+        <div style="float:right;">
+            {% csrf_token %}
+            <input type="submit" value="生成拣货单">
+        </div>
+    </fieldset>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#channel_types_all").click(function(){
+            if($(this).prop('checked') == true)
+                $('.channel_type').prop('checked', true);
+            else
+                $('.channel_type').prop('checked', false);
+        });
+
+        $("#pick_types_all").click(function(){
+            if($(this).prop('checked') == true)
+                $('.pick_type').prop('checked', true);
+            else
+                $('.pick_type').prop('checked', false);
+        });
+
+        $("#depots_all").click(function(){
+            if($(this).prop('checked') == true)
+                $('.depot').prop('checked', true);
+            else
+                $('.depot').prop('checked', false);
+        });
+
+        $("#shippings_all").click(function(){
+            if($(this).prop('checked') == true)
+                $('.shipping').prop('checked', true);
+            else
+                $('.shipping').prop('checked', false);
+        });
+
+    })
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends "base_header.html" %}
+{% block content %}
+{% include "cxcalendar.html" %}
+<div>
+    <a href="{% url 'pick_list' 'all' %}" {% if pick_parm == 'all' %}style="color:red;"{% endif %}>ALL</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="{% url 'pick_list' 'no_print' %}" {% if pick_parm == 'no_print' %}style="color:red;"{% endif %}>未打印</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="{% url 'pick_list' 'printed' %}" {% if pick_parm == 'printed' %}style="color:red;"{% endif %}>已打印</a>
+</div>
+
+<form class="form-inline" role="form" id="iform" action="" method="get">
+    <!-- {% csrf_token %} -->
+
+    <input type="hidden" name="type" value="do_search">
+    <div>
+        <div class="form-grou">
+            <label>拣货单号:</label>
+            <input type="text" class="" id="pick_num" value="" name="pick_num" style="width:120px;">
+            <label>拣货状态:</label>
+            <select name="status" id="status">
+                <option></option>
+                {% for key, p_status in pick_status %}
+                    <option value="{{ key }}">{{ p_status }}</option>
+                {% endfor %}
+            </select>
+            <label>拣货单类型:</label>
+            <select name="pick_type" id="pick_type">
+                <option></option>
+                {% for key, pick_type in pick_types %}
+                    <option value="{{ key }}">{{ pick_type }}</option>
+                {% endfor %}
+            </select>
+            <label>Created: From</label>
+            <input type="text" class="date" id="created_from" value="" name="created_from"  style="width:100px;">
+            <label>To</label>
+            <input type="text" class="date" id="created_to" value="" name="created_to"  style="width:100px;">
+            <label>每页显示:</label>
+            <input type="text" class="" id="per_num" placeholder="100" value="" name="per_num"  style="width:40px;">
+            <button type="submit" class="btn btn-primary btn-default btn">提交检索</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit" onclick="location.href='{{ request.path }}';return false;" class="btn btn-default btn111">清空</button>
+        </div>
+    </div>
+</form>
+<br>
+<form class="form-inline" role="form" action="{% url 'pick_list' 'detail' %}" method="get" id="pick_form">
+    <div id="table_div" style="overflow:scroll;width:90%;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="60"><input type="checkbox" id="checkall">&nbsp;&nbsp;ID</th>
+                    <th width="100">拣货单号</th>
+                    <th width="100">拣货状态</th>
+                    <th width="100">拣货单类型</th>
+                    <th width="60">物流</th>
+                    <th width="100">生成人<br>生成时间</th>
+                    <th width="100">打印人<br>打印时间</th>
+                    <th width="100">拣货人<br>拣货时间</th>
+                    <th width="100">分拣人<br>开始~结束</th>
+                    <th width="100">多多包装人<br>开始~结束</th>
+                    <th width="100">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in objs %}
+                <tr id="pick_{{ obj.id }}">
+                    <td><input type="checkbox" name="pick_id" class="pick_id" value="{{ obj.id }}">{{ obj.id }}</td>
+                    <td>{{ obj.pick_num }}</td>
+                    <td>{{ obj.get_status_display }}</td>
+                    <td>{{ obj.get_pick_type_display }}</td>
+                    <td>{{ obj.shipping }}</td>
+                    <td>{{ obj.user_adder }} <br> {{ obj.created|date:"m-d H:i" }}</td>
+                    <td>
+                        {% if not obj.printer %}
+                            -
+                        {% else %}
+                            {{ obj.printer }} <br> {{ obj.print_time|date:"m-d H:i" }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not obj.assigner %}
+                            -
+                        {% else %}
+                            {{ obj.assigner }} <br> {{ obj.assigne_time|date:"m-d H:i" }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not obj.picker %}
+                            -
+                        {% else %}
+                            {{ obj.picker }} <br> {{ obj.pick_start|date:"m-d H:i" }}~{{ obj.pick_end|date:"m-d H:i" }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not obj.packager %}
+                            -
+                        {% else %}
+                            {{ obj.packager }} <br> {{ obj.package_start|date:"m-d H:i" }}~{{ obj.package_end|date:"m-d H:i" }}
+                        {% endif %}
+                    </td>
+                    <td id="action_{{ obj.id }}">
+                        <a target="_blank" href="{% url 'pick_list' 'detail' %}?pick_id={{ obj.id }}" title="{{ obj.id }}">拣货单详情</a><br>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "pagination.html" %}
+    <br><input type="submit" class="btn btn-primary btn-default" id="bulk_print" value="批量打印拣货单">
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#checkall").click(function(){
+            if($(this).prop('checked') == true)
+                $('.pick_id').prop('checked', true);
+            else
+                $('.pick_id').prop('checked', false);
+        });
+
+
+        $('#created_from').cxCalendar();
+        $('#created_to').cxCalendar();
+        
+    });
+</script>
+{% endblock %}

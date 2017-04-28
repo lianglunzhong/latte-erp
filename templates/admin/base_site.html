@@ -1,0 +1,110 @@
+<link rel="stylesheet" href="/static/css/bootstrap.css" media="screen">
+
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}"><span style="color:#fff;">in vogue+ </span><span style="color:#edc77a;">ERP</span></a></h1>
+
+{% endblock %}
+
+{% block nav-global %}
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <!--<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>-->
+        <!--<li><a href="#">Link</a></li>-->
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">产品 <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'product_handle' %}">产品--数据操作</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/product/import_buyer_product/">批量导入新产品</a></li>
+            <li><a href="/product/import_update_product/">批量更新已有产品</a></li>
+          </ul>
+        </li>
+      </ul>
+
+        <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">供应商 <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <!--<li><a href="/admin/supply/supplier/supplier_list/">负责人管理下的供应商列表</a></li>-->
+            <li><a href="/admin/supply/purchaseorderitem/purchaseorderitem_check">采购对单</a></li>
+            <li><a href="/admin/supply/purchaseorderitem/purchaseorderitem_error_notice">采购异常</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/admin/supply/purchaseorderitem/all_list">打印全部采购单</a></li>
+            <li><a href="/admin/supply/purchaseorderitem/all_list_export">打印全部采购单导出功能</a></li>
+            <li><a href="/admin/supply/purchaseorderitem/itemin_single">南京仓采购货品单件扫描入库</a></li>
+            <li><a href="/admin/supply/purchaseorderitem/itemin">南京仓采购货品多件扫描入库</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/supply/create_purchaseorder">一键生成采购单</a></li>
+
+          </ul>
+        </li>
+      </ul>
+
+        <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">仓库 <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/depot/import_depotitem_location">南京仓库批量更新货品库位</a></li>
+            <li><a href="/depot/import_depotinlog">南京仓手动杂入</a></li>
+            <li><a href="/depot/import_depotoutlog/">南京仓手动杂出</a></li>
+            <li><a href="/depot/bulk_print_barcode/">批量打印条码</a></li>
+            <li><a href="/depot/export_depotitem_cost_inventory/">仓库批量导出成本库存</a></li>
+
+          </ul>
+        </li>
+      </ul>
+
+        <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">订单 <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'order_handle' %}">订单--数据操作</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/admin/order/alias/import_channel_sku/">渠道别名sku导入</a></li>
+
+          </ul>
+        </li>
+      </ul>
+
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">分拣系统 <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'pick_index' %}">默认页面</a></li>
+            <li><a href="{% url 'assign_shipping' 'auto' %}">分配物流方式</a></li>
+            <li><a href="{% url 'get_tracking_no' %}">物流商下单</a></li>
+            <li><a href="{% url 'pick_create' %}">生成拣货单</a></li>
+            <li><a href="{% url 'pick_list' 'all' %}">打印拣货单</a></li>
+            <li><a href="{% url 'pick_sort' %}">单品单件包装</a></li>
+            <li><a href="{% url 'pick_sort' %}">单品多件包装</a></li>
+            <li><a href="{% url 'pick_sort' %}">多品多件分拣</a></li>
+            <li><a href="{% url 'pick_packaging' %}">多品多件包装</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="{% url 'tongguan_index' %}">通关报关 <span class="caret"></span></a>
+          <!--<ul class="dropdown-menu">-->
+          <!--</ul>-->
+        </li>
+      </ul>
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+
+
+{% endblock %}

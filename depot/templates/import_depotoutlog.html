@@ -1,0 +1,71 @@
+{% extends "base_header.html" %}
+
+{% block title %}{{class_name}} {{flag}}{% endblock %}
+{% block content %}
+
+{% if success %}
+    <div class="alert alert-warning alert-dismissable">
+        <strong style="font-size:20px;">{{ msg }}</strong>
+    </div>
+{% endif %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <form class="form-horizontal" action="" method="post">
+            {% csrf_token %}
+            <fieldset>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">货品sku</label>
+                    <div class="col-lg-10">
+                        <input type="text" name="depot_id" value="2" style="display:none">
+                        <input type="text" name="item_sku">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">出库数量</label>
+                    <div class="col-lg-10">
+                        <input type="text" name="qty">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">备注</label>
+                    <div class="col-lg-10">
+                        <input type="text" name="note">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">出库类型</label>
+                    <div class="col-lg-10">
+                        <select name="type">
+                            <option value="1">移库</option>
+                            <option value="2">杂出-改码</option>
+                            <option value="3">杂出-复检？</option>
+                            <option value="4">杂出-拍照样衣</option>
+                            <option value="5">杂出-盘亏</option>
+                            <option value="6">'杂出-亚马逊FBA调拨？</option>
+                            <option value="7">杂出-速卖通海外仓调拨？</option>
+                            <option value="8">杂出-改成本出库</option>
+                            <option value="9">杂出-广州电商？</option>
+                            <option value="10">杂出-质量问题出库</option>
+                            <option value="11">杂出-重复入库？</option>
+                            <option value="12">杂出-误对单货物/验单错误？</option>
+                            <option value="13">杂出-福袋礼物？</option>
+                            </select>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <!--<button type="reset" class="btn btn-default">Cancel</button>-->
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

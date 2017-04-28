@@ -1,0 +1,23 @@
+{% extends "base_header.html" %}
+{% block content %}
+
+<div class="alert alert-warning alert-dismissable">
+    <strong style="font-size:20px;">
+        1、一键生成采购单的来源是包含2个点：a、开始处理的采购方案下的货品；b、无库存的订单货品<br>
+    </strong>
+</div>
+
+ <form class="form-inline" role="form" id="create_purchaseorder" action="#" method="post" style="float:left;">
+    {% csrf_token %}
+    <input type="hidden" name="type" value="create_purchaseorder">
+    <div>
+    <button style="font-size:40px;width:300px; height:70px;margin-bottom:30px;" type="submit" class="btn btn-default btn-primary" >一键生成采购单</button>
+    </div>
+</form>
+<br>
+
+
+<script type="text/javascript">
+
+</script>
+{% endblock %}

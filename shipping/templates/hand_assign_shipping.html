@@ -1,0 +1,122 @@
+{% extends "base_header.html" %}
+{% block content %}
+
+<form class="form-inline" role="form" id="iform" action="" method="get">
+    <input type="hidden" name="type" value="do_search">
+    <div style="width: 95%;">
+        <div class="form-grou">
+            <label>Shop:</label>
+            <select name="shop" id="shop">
+                <option></option>
+                {% for key, value in shops %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+            <label>快递/小包:</label>
+            <select name="shipping_type" id="shipping_type">
+                <option></option>
+                <option value="0">小包</option>
+                <option value="1">快递</option>
+            </select>
+            <label>可否通关</label>
+            <select name="tongguan" id="tongguan">
+                <option></option>
+                <option value="0">不可以</option>
+                <option value="1">可以</option>
+            </select>
+            <!-- <label>每页显示:</label>
+            <input type="text" class="" id="per_num" placeholder="100" value="" name="per_num"  style="width:40px;"> -->
+            <button type="submit" class="btn btn-primary btn-default btn111">提交检索</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit" onclick="location.href='{{ request.path }}';return false;" class="btn btn-default btn111">清空</button>
+        </div>
+        <div style="float:right;margin-top: 5px;font-size: 15px;">共<span class="total">{{ package_list|length }}</span>条</div>
+    </div>
+</form>
+
+<div style="margin:30px 0px;width:95%;" id="pick_div">
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th width="5%">Package id</th>
+                <th width="5%">Package status</th>
+                <th width="10%">Ordernum</th>
+                <th width="5%">Shop</th>
+                <th width="7%">产品总数</th>
+                <th width="7%">Weight</th>
+                <th width="10%">国家</th>
+                <th width="10%">备注</th>
+                <th width="8%">快递/小包</th>
+                <th width="5%">币种</th>
+                <th width="5%">运费</th>
+                <th width="10%">可否通关</th>
+                <th width="10%">分配物流方式</th>
+            </tr>
+        </thead>
+        <tbody id="pick_data">
+            {% for package in objs %}
+            <tr>
+                <td>{{ package.id }}</td>
+                <td>配货中</td>
+                <td>{{ package.order.ordernum }}</td>
+                <td>{{ package.order.channel.get_type_display }}</td>
+                <td>{{ package.get_qty }}</td>
+                <td>{{ package.get_weight }}</td>
+                <td>{{ package.shipping_country }}</td>
+                <td>{{ package.order.note }} | {{ package.note }}</td>
+                <td>{% if package.order.shipping_type %}快递{% else %}小包{% endif %}</td>
+                <td>{{ package.order.currency }}</td>
+                <td>{{ package.order.amount_shipping }}</td>
+                <td>{% if not package.order.cannot_tongguan %}可以{% else %}{{ package.order.cannot_tongguan }}{% endif %}</td>
+                <td>
+                    <select name="shipping" class="manual_assign_shipping" title="{{ package.id }}">
+                        <option></option>
+                    {% for shipping in shippings %}
+                        <option value="{{ shipping.id }}">{{ shipping.label }}</option>
+                    {% endfor %}
+                    </select>
+                    <div id="has_assign_{{ package.id }}"></div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".manual_assign_shipping").change(function(){
+            var package_id = $(this).attr('title');
+            var shipping_id = $(this).val();
+            $(".loading").show();
+            $.ajax({
+                type: "GET",
+                url: "{% url 'assign_shipping' 'manual_assign_shipping'%}",
+                dataType: "json",
+                async : false,
+                data: {
+                    'package_id': package_id,
+                    'shipping_id': shipping_id,
+                },
+                success: function(res){
+                    if(!res['success'])
+                    {
+                        $("#has_assign_" + package_id).html('分配失败');
+                        alert(res['msg']);
+                    }
+                    else
+                    {
+                        $("#has_assign_" + package_id).html('分配成功');
+                    }
+                }
+            });
+            $(".loading").hide();
+        })
+
+        {% for key, value in gets.items %}
+            $("#{{ key }}").val('{{ value }}');
+        {% endfor %}
+    })
+</script>    
+
+{% endblock %}

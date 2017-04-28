@@ -1,0 +1,10 @@
+type_list = []
+type_list.append('1','')
+type_list.append('2',side)
+type_list.append('3','index')
+type_list.append('4','phne')
+
+if self.value() == 4
+	return queryset.filter(type__in=10)
+
+

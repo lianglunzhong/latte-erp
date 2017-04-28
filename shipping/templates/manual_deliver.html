@@ -1,0 +1,153 @@
+{% extends "base_header.html" %}
+{% block content %}
+<div>
+    <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'pick_manual_deliver' %}">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="import_tracking_no">
+        <label class="control-label" for="fileInput">导入物流单号:</label>
+        <div class="form-group">
+            <input type="file" class="input-file" name="csvFile">
+        </div>
+        <button type="submit" class="btn btn-small btn-primary">Submit</button>
+        <a href="/static/downloadfiles/import_tracking_no.csv">格式下载</a>
+    </form>
+    <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'pick_manual_deliver' %}">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="package_cost_import">
+        <label class="control-label" for="fileInput">导入物流价格:</label>
+        <div class="form-group">
+            <input type="file" class="input-file" name="csvFile">
+        </div>
+        <button type="submit" class="btn btn-small btn-primary">Submit</button>
+        <a href="/static/downloadfiles/package_cost.csv">格式下载</a>
+    </form>
+    <form class="form-inline" role="form" enctype="multipart/form-data" method="post" action="{% url 'pick_manual_deliver' %}">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="package_cost1_import">
+        <label class="control-label" for="fileInput">导入二次运费:</label>
+        <div class="form-group">
+            <input type="file" class="input-file" name="csvFile">
+        </div>
+        <button type="submit" class="btn btn-small btn-primary">Submit</button>
+        <a href="/static/downloadfiles/package_cost1.csv">格式下载</a>
+    </form>
+</div><br>
+<form class="form-inline" role="form" id="iform" action="{% url 'pick_manual_deliver' %}" method="get">
+    <input type="hidden" name="type" value="do_search">
+    <div class="form-grou">
+        <label>Package ID:</label>
+        <input type="text" class="form-control form55" id="package_id" placeholder="Enter Package ID." value="{{ package_id }}" name="package_id" style="width:140px;">
+        <label>每页显示:</label>
+        <input type="text" class="form-control form55" id="per_num" placeholder="100" value="{{ per_num }}" name="per_num"  style="width:60px;">
+        <button type="submit" class="btn btn-default">提交检索</button>
+        <br>
+    </div>
+</form>
+<br>
+
+<form method="post" action="{% url 'pick_manual_deliver' %}">
+    {% csrf_token %}
+    <input type="hidden" id="hidden_type" name="type" value="print_deliver">
+    <div style="overflow:scroll;">
+    <table class="table table-bordered" width="95%" style="table-layout:fixed;">
+        <thead>
+            <tr>
+                <th width="120" id="package_id"><input type="checkbox" id="checkall"> Package ID</th>
+                <th width="100" id="rq">生成日期</th>
+                <th width="100" id="ass">Shop</th>
+                <th width="150" id="dd">订单号</th>
+                <th width="100" id="ass">包裹状态</th>
+                <th width="100" id="pt">分批发货(todo)</th>
+                <th width="80" id="zs">产品总数</th>
+                <th width="80" id="zt">快递/小包</th>
+                <th width="100" id="fs">物流方式</th>
+                <th width="80" id="bz">币种</th>
+                <th width="80" id="sa">运费</th>
+                <th width="150" id="beizhu"  style="word-break: break-all; overflow:hidden;">备注</th>
+                <th width="100" id="sc">国家</th>
+                <th width="100" id="sc">Weight</th>
+                <th width="150" id="zhongliang" title="Actual Weight">实际重量</th>
+                <th width="100" id="zt">发货标记</th>
+                <th width="100" id="sj">打印时间</th>
+                <th width="100" id="st">Ship Time</th>
+                <th width="150" id="wl">物流号</th> 
+                <th width="100" id="tp">Track Price</th>
+                <th width="100" id="ass">可否通关</th>
+                <th width="100" id="ass">手工发货说明</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in objs %}
+            <tr>
+                <td><input type="checkbox" name="package_id" value="{{ obj.id }}" class="package_id"> <a target="_blank" href="/admin/shipping/package/{{ obj.id }}/change/">{{ obj.id }}</a></td>
+                <td>{{ obj.created|date:"m-d h:i:s" }}</td>
+                <td>{{ obj.order.channel.get_type_display }}</td>
+                <td><a href="/admin/order/order/{{ obj.order.id }}/change/" target="_blank">{{ obj.order.ordernum }}</a></td> 
+                <td>{{ obj.get_status_display }}</td>
+                <td>No</td>
+                <td>{{ obj.qty }}</td>
+                <td>{{ obj.order.get_shipping_type_display }}</td>
+                <td>{{ obj.shipping.label }}</td>
+                <td>{{ obj.order.currency }}</td>
+                <td>{{ obj.order.amount_shipping }}</td>
+                <td>{{ obj.order.note }} | {{ obj.note }}</td>
+                <td>{{ obj.order.shipping_country }}</td>
+                <td>{{ obj.weight }}</td>
+                <td>
+                    <input style="width:70px;" value="{{ obj.weight }}" type="text" id="weight_{{ obj.id }}">
+                    <button class="btn btn-primary btn-small" type="button" id="btn_{{ obj.id }}" onclick="javascript:update_weight('{{ obj.id }}','{{ obj.weight }}')">更新</button>
+                </td>
+                <td>{% if obj.status == 5 %} 已发货 {% else %} 未发货 {% endif %}</td>
+                <td>{{ obj.print_time|date:"Y-m-d" }}</td>
+                <td>{{ obj.ship_time|date:"Y-m-d" }}</td>
+                <td>{{ obj.tracking_no }}</td>
+                <td>{{ obj.cost }}</td>
+                <td>{{ obj.tongguan }}</td>
+                <td>{{ obj.manual_note }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <input type="submit" class="btn btn-small btn-primary" value="打印发货单">
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#checkall").click(function(){
+            if($(this).prop('checked') == true)
+                $('.package_id').prop('checked', true);
+            else
+                $('.package_id').prop('checked', false);
+        });
+
+        {% for key, value in gets.items %}
+            $("#{{ key }}").val('{{ value }}');
+        {% endfor %}
+    })
+
+    function update_weight(id,old_weight){
+        var weight = $('#weight_'+id).val()
+        $.get(
+            '{% url "pick_manual_deliver" %}',
+            {   
+                'type': 'update_weight',
+                'id':id,
+                'weight': weight,
+            },
+            function (res) {
+                if(res['success']){
+                    alert("修改成功!")
+                    $('#weight_'+id).val(weight)
+                    $('#btn_'+id).attr('onclick',"javascript:update_weight('"+id+"','"+weight+"')")
+                }else{
+                    alert("修改失败!", res['msg'])
+                    $('#weight_'+id).val(old_weight)
+                }
+            },
+            'json'
+        )
+    }
+</script>    
+
+{% endblock %}

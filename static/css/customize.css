@@ -1,0 +1,113 @@
+.span2{
+	width:60px;
+	height:25px;
+	float:left;
+	display:inline-block;
+}
+.btn111{
+	font-size:12px;
+	padding:6px 11px;	
+}
+.btn222{
+	font-size:12px;
+	float:right;
+	padding:3px 8px;
+}
+
+.actter{
+	width:80px;
+	height:22px;
+
+}
+
+.form-inline{
+	margin-top:5px;
+	
+}
+.form33{
+	width:1170px;
+	margin-bottom:20px;
+}
+.form11{
+	width:450px;
+	float:left;
+}
+.form44{
+	width:500px;
+
+}
+.form55{
+	height:24px;
+
+}
+.form22{
+	width:450px;
+	float:left;
+	margin-left:50px;
+}
+table tr td,table tr th{
+		word-wrap:break-word;
+        white-space:no;
+}
+
+#pgid,#zs,#rq,#dd,#zt,#bz,#sa,#sc,#zhongliang,#fs{
+	max-width:150px;
+}
+
+#pgid{
+	width:100px;
+}
+#zs{
+	width:70px;
+}
+#pt{
+	width:50px;
+}
+#rq{
+	width:140px;
+}
+#dd{
+	width:150px;
+}
+#zt{
+	width:70px;
+}
+#bz{
+	width:50px;
+}
+#sa{
+	width:70px;
+}
+#beizhu{
+	width:150px;
+}
+#sc{
+	width:80px;
+}
+#zhongliang{
+	width:150px;
+}
+#fs{
+	width:80px;
+}
+#sj{
+	width:90px;
+}
+#st{
+	width:90px;
+}
+#wl{
+	width:120px;
+}
+#tl{
+	width:150px;
+}
+#tp{
+	width:90px;
+}
+#ass{
+	width:120px;
+}
+.table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
+    border-bottom-width: 0;
+}
