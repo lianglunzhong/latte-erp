@@ -1,4 +1,4 @@
-Django==1.9.4
+Django==1.11.28
 django-autocomplete-light==3.1.6
 django-bootstrap3==7.0.1
 django-crispy-forms==1.6.0
